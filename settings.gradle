@@ -1,0 +1,2 @@
+rootProject.name = "TeaPlucker"
+include ':app'
