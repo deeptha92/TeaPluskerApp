@@ -6,6 +6,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -30,6 +31,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.Helper.DatabaseHelperClass;
 import com.example.Modal.EmployeeModalClass;
 import com.example.Modal.SupplierModalClass;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -180,37 +182,75 @@ public class SupplierFormActivity extends AppCompatActivity {
         et_unitPrice_gt.setText(greenTeaPrice_pre);
         et_unitPrice_tp_deduction.setText(transport_up_pre);
 
-        quantity_gt = "quantity_gt";
-        price_gt = "0";
-        quantity_ae = "0";
-        price_ae = "0";
-        quantity_ca_deduction = "0";
-        quantity_wf_deduction = "0";
-        quantity_tp_deduction = "0";
-        quantity_mr_deduction = "0";
-        quantity_mt_deduction = "0";
-        quantity_kok_deduction = "0";
-        quantity_ot_deduction = "0";
+        String json = sh.getString("myModel", "");
 
-        price_ca_deduction = "0";
-        price_wf_deduction = "0";
-        price_tp_deduction = "0";
-        price_mt_deduction = "0";
-        price_mr_deduction = "0";
-        price_kok_deduction = "0";
-        price_ot_deduction = "0";
+        if (!json.isEmpty()) {
+            // Convert the JSON string back to a MyModel object
+            Gson gson = new Gson();
+            EmployeeModalClass myModel = gson.fromJson(json, EmployeeModalClass.class);
 
-        up_gt = et_unitPrice_gt.getText().toString();
-        up_ae = "0";
-        up_ca = "0";
-        up_wf = "0";
-        up_tp = et_unitPrice_tp_deduction.getText().toString();
-        up_mt = "0";
-        up_mr = "0";
-        up_kok = "0";
-        up_ot = "0";
+            Toast.makeText(SupplierFormActivity.this, "S===================", Toast.LENGTH_SHORT).show();
 
 
+            et_quantity_gt.setText(myModel.getGreentea_qua());
+            et_price_gt.setText(myModel.getGreentea_pr());
+            et_quantity_ae.setText(myModel.getAdditional_qua());
+            et_price_ae.setText(myModel.getAdditional_pr());
+            et_quantity_ca_deduction.setText(myModel.getCash_qua());
+            et_price_ca_deduction.setText(myModel.getCash_pr());
+            et_quantity_wf_deduction.setText(myModel.getWelfare_qua());
+            et_price_wf_deduction.setText(myModel.getWelfare_pr());
+            et_quantity_mt_deduction.setText(myModel.getMt_qua());
+            et_price_mt_deduction.setText(myModel.getMt_pr());
+            et_quantity_mr_deduction.setText(myModel.getManure_qua());
+            et_price_mr_deduction.setText(myModel.getManure_pr());
+            et_quantity_tp_deduction.setText(myModel.getTransport_qua());
+            et_price_tp_deduction.setText(myModel.getTransport_pr());
+            et_quantity_kok_deduction.setText(myModel.getKok_qua());
+            et_price_kok_deduction.setText(myModel.getKok_pr());
+            et_quantity_ot_deduction.setText(myModel.getOther_qua());
+            et_price_ot_deduction.setText(myModel.getOther_pr());
+
+            et_unitPrice_gt.setText(greenTeaPrice_pre);
+            et_unitPrice_ae.setText(myModel.getAdditional_up());
+            et_unitPrice_ca_deduction.setText(myModel.getCash_up());
+            et_unitPrice_wf_deduction.setText(myModel.getWelfare_up());
+            et_unitPrice_tp_deduction.setText(transport_up_pre);
+            et_unitPrice_mr_deduction.setText(myModel.getManure_up());
+            et_unitPrice_mt_deduction.setText(myModel.getMt_up());
+            et_unitPrice_kok_deduction.setText(myModel.getKok_up());
+            et_unitPrice_ot_deduction.setText(myModel.getOther_up());
+        } else {
+            quantity_gt = "quantity_gt";
+            price_gt = "0";
+            quantity_ae = "0";
+            price_ae = "0";
+            quantity_ca_deduction = "0";
+            quantity_wf_deduction = "0";
+            quantity_tp_deduction = "0";
+            quantity_mr_deduction = "0";
+            quantity_mt_deduction = "0";
+            quantity_kok_deduction = "0";
+            quantity_ot_deduction = "0";
+
+            price_ca_deduction = "0";
+            price_wf_deduction = "0";
+            price_tp_deduction = "0";
+            price_mt_deduction = "0";
+            price_mr_deduction = "0";
+            price_kok_deduction = "0";
+            price_ot_deduction = "0";
+
+            up_gt = et_unitPrice_gt.getText().toString();
+            up_ae = "20";
+            up_ca = "10";
+            up_wf = "20";
+            up_tp = et_unitPrice_tp_deduction.getText().toString();
+            up_mt = "20";
+            up_mr = "20";
+            up_kok = "20";
+            up_ot = "0";
+        }
         supplier_names.add("D.M. Ubesena / 01");
         supplier_names.add("D.M. Jayasena / 02");
         supplier_names.add("D.M. Anulawathi / 03");
@@ -294,70 +334,6 @@ public class SupplierFormActivity extends AppCompatActivity {
             }
         });
 
-
-        BtnExpand.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onClick(View v) {
-                if (LLGreenTea.getVisibility() == View.GONE && LLAdition.getVisibility() == View.GONE) {
-                    TransitionManager.beginDelayedTransition(CvcardView, new AutoTransition());
-                    LLGreenTea.setVisibility(View.VISIBLE);
-                    LLAdition.setVisibility(View.VISIBLE);
-
-                    LLTotalEarnings.setVisibility(View.VISIBLE);
-                    LLLabelEarning.setVisibility(View.VISIBLE);
-
-                    BtnExpand.setBackgroundResource(R.drawable.ic_baseline_expand_less_24);
-                    tv_additional_earnings.setSelected(true);
-                } else {
-                    TransitionManager.beginDelayedTransition(CvcardView, new AutoTransition());
-                    LLGreenTea.setVisibility(View.GONE);
-                    LLAdition.setVisibility(View.GONE);
-                    LLTotalEarnings.setVisibility(View.GONE);
-                    LLLabelEarning.setVisibility(View.GONE);
-                    BtnExpand.setBackgroundResource(R.drawable.ic_baseline_expand_more_24);
-                }
-            }
-        });
-
-        BtnExpandDeduction.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onClick(View v) {
-                if (LLCashAdvance_deduction.getVisibility() == View.GONE && LLWelfare_deduction.getVisibility() == View.GONE
-                        && LLTransport_deduction.getVisibility() == View.GONE && LLMadeTea_deduction.getVisibility() == View.GONE
-                        && LLManure_deduction.getVisibility() == View.GONE && LLKOK_deduction.getVisibility() == View.GONE
-                        && LLOther_deduction.getVisibility() == View.GONE) {
-                    TransitionManager.beginDelayedTransition(CvcardView, new AutoTransition());
-                    LLCashAdvance_deduction.setVisibility(View.VISIBLE);
-                    LLWelfare_deduction.setVisibility(View.VISIBLE);
-                    LLMadeTea_deduction.setVisibility(View.VISIBLE);
-                    LLManure_deduction.setVisibility(View.VISIBLE);
-                    LLTransport_deduction.setVisibility(View.VISIBLE);
-                    LLKOK_deduction.setVisibility(View.VISIBLE);
-                    LLOther_deduction.setVisibility(View.VISIBLE);
-                    LLTotalDeduction.setVisibility(View.VISIBLE);
-
-                    LLLbl_Deduction.setVisibility(View.VISIBLE);
-
-                    BtnExpandDeduction.setBackgroundResource(R.drawable.ic_baseline_expand_less_24);
-                } else {
-                    TransitionManager.beginDelayedTransition(CvcardView, new AutoTransition());
-                    LLCashAdvance_deduction.setVisibility(View.GONE);
-                    LLWelfare_deduction.setVisibility(View.GONE);
-                    LLMadeTea_deduction.setVisibility(View.GONE);
-                    LLManure_deduction.setVisibility(View.GONE);
-                    LLTransport_deduction.setVisibility(View.GONE);
-                    LLKOK_deduction.setVisibility(View.GONE);
-                    LLOther_deduction.setVisibility(View.GONE);
-                    LLTotalDeduction.setVisibility(View.GONE);
-
-                    LLLbl_Deduction.setVisibility(View.GONE);
-
-                    BtnExpandDeduction.setBackgroundResource(R.drawable.ic_baseline_expand_more_24);
-                }
-            }
-        });
 
         Btnadd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1546,6 +1522,11 @@ public class SupplierFormActivity extends AppCompatActivity {
 
         });
 
+
+    }
+
+    public void getPreData() {
+        Toast.makeText(SupplierFormActivity.this, "No ================", Toast.LENGTH_SHORT).show();
 
     }
 }

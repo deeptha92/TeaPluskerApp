@@ -3,6 +3,7 @@ package com.example.Adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.Helper.DatabaseHelperClass;
 import com.example.Modal.EmployeeModalClass;
 import com.example.Modal.SupplierModalClass;
-import com.example.Helper.DatabaseHelperClass;
 import com.example.TeaPlucker.MainActivity;
-import com.example.Popups.PopUpClass;
 import com.example.TeaPlucker.R;
+import com.example.TeaPlucker.SupplierFormActivity;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,9 +26,9 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class EmployeeAdapterClass extends RecyclerView.Adapter<EmployeeAdapterClass.ViewHolder>{
+public class EmployeeAdapterClass extends RecyclerView.Adapter<EmployeeAdapterClass.ViewHolder> {
 
-    List<EmployeeModalClass> employee ;
+    List<EmployeeModalClass> employee;
     Context context;
     DatabaseHelperClass databaseHelperClass;
     SupplierModalClass supplierModalClass;
@@ -127,35 +129,49 @@ public class EmployeeAdapterClass extends RecyclerView.Adapter<EmployeeAdapterCl
                 other_up = employeeModalClass.getOther_up();
                 other_pr = employeeModalClass.getOther_pr();
 
-                PopUpClass popUpClass = new PopUpClass();
-                popUpClass.showPopupWindow(v);
-                PopUpClass.greentea_qua.setText(greentea_qua);
-                PopUpClass.greentea_up.setText(greentea_up);
-                PopUpClass.greentea_pr.setText(greentea_pr);
-                PopUpClass.additional_qua.setText(additional_qua);
-                PopUpClass.additional_up.setText(additional_up);
-                PopUpClass.additional_pr.setText(additional_pr);
-                PopUpClass.cash_qua.setText(cash_qua);
-                PopUpClass.cash_up.setText(cash_up);
-                PopUpClass.cash_pr.setText(cash_pr);
-                PopUpClass.welfare_qua.setText(welfare_qua);
-                PopUpClass.welfare_up.setText(welfare_up);
-                PopUpClass.welfare_pr.setText(welfare_pr);
-                PopUpClass.mt_qua.setText(mt_qua);
-                PopUpClass.mt_up.setText(mt_up);
-                PopUpClass.mt_pr.setText(mt_pr);
-                PopUpClass.manure_qua.setText(manure_qua);
-                PopUpClass.manure_up.setText(manure_up);
-                PopUpClass.manure_pr.setText(manure_pr);
-                PopUpClass.transport_qua.setText(transport_qua);
-                PopUpClass.transport_up.setText(transport_up);
-                PopUpClass.transport_pr.setText(transport_pr);
-                PopUpClass.kok_qua.setText(kok_qua);
-                PopUpClass.kok_up.setText(kok_up);
-                PopUpClass.kok_pr.setText(kok_pr);
-                PopUpClass.other_qua.setText(other_qua);
-                PopUpClass.other_up.setText(other_up);
-                PopUpClass.other_pr.setText(other_pr);
+//                PopUpClass popUpClass = new PopUpClass();
+//                popUpClass.showPopupWindow(v);
+//                PopUpClass.greentea_qua.setText(greentea_qua);
+//                PopUpClass.greentea_up.setText(greentea_up);
+//                PopUpClass.greentea_pr.setText(greentea_pr);
+//                PopUpClass.additional_qua.setText(additional_qua);
+//                PopUpClass.additional_up.setText(additional_up);
+//                PopUpClass.additional_pr.setText(additional_pr);
+//                PopUpClass.cash_qua.setText(cash_qua);
+//                PopUpClass.cash_up.setText(cash_up);
+//                PopUpClass.cash_pr.setText(cash_pr);
+//                PopUpClass.welfare_qua.setText(welfare_qua);
+//                PopUpClass.welfare_up.setText(welfare_up);
+//                PopUpClass.welfare_pr.setText(welfare_pr);
+//                PopUpClass.mt_qua.setText(mt_qua);
+//                PopUpClass.mt_up.setText(mt_up);
+//                PopUpClass.mt_pr.setText(mt_pr);
+//                PopUpClass.manure_qua.setText(manure_qua);
+//                PopUpClass.manure_up.setText(manure_up);
+//                PopUpClass.manure_pr.setText(manure_pr);
+//                PopUpClass.transport_qua.setText(transport_qua);
+//                PopUpClass.transport_up.setText(transport_up);
+//                PopUpClass.transport_pr.setText(transport_pr);
+//                PopUpClass.kok_qua.setText(kok_qua);
+//                PopUpClass.kok_up.setText(kok_up);
+//                PopUpClass.kok_pr.setText(kok_pr);
+//                PopUpClass.other_qua.setText(other_qua);
+//                PopUpClass.other_up.setText(other_up);
+//                PopUpClass.other_pr.setText(other_pr);
+
+                Intent myIntent = new Intent(context, SupplierFormActivity.class);
+                Gson gson = new Gson();
+                String json = gson.toJson(employeeModalClass);
+
+// Save the JSON string to SharedPreferences
+                SharedPreferences sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("myModel", json);
+                editor.apply();
+                context.startActivity(myIntent);
+
+
+
 
             }
         });

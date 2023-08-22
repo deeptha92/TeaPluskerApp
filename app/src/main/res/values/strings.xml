@@ -10,4 +10,5 @@
         <string name="login_mobile_number_hint">Mobile Number</string>
         <string name="title">KOK</string>
         <string name="invalid">Invalid Username or Password</string>
+    <string name="delete_details">Delete Details</string>
 </resources>

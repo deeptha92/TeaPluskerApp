@@ -129,7 +129,10 @@ public class MainActivity extends AppCompatActivity {
         lav_form.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("myModel"); // Remove the key associated with the MyModel object
+                editor.apply();
                 LLFirst.setVisibility(View.INVISIBLE);
                 LLSecond.setVisibility(View.INVISIBLE);
                 LLThird.setVisibility(View.INVISIBLE);

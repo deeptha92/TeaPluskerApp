@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="12dp"
-                android:background="@drawable/background_form"
+                android:background="@drawable/tealeaves_3_bk"
                 tools:ignore="ExtraText">
 
                 <LinearLayout
@@ -136,7 +136,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/LLLabelEarning"
@@ -203,7 +202,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/LLGreentea"
@@ -274,7 +272,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/LLAditional"
@@ -342,7 +339,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/LLDeduction"
@@ -417,7 +413,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:visibility="gone"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -427,7 +422,7 @@
                     <TextView
                         android:id="@+id/tv_cashAdvance_deduction"
                         android:layout_width="0dp"
-                        android:layout_height="50dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="Cash Advance"
                         style="@style/TEXT"
@@ -495,7 +490,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/LLCashAdvance_deduction"
@@ -571,7 +565,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/LLWelfare_deduction"
@@ -638,7 +631,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/LLTransport_deduction"
@@ -704,7 +696,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/LLManure_deduction"
@@ -770,7 +761,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/LLMadeTea_deduction"
@@ -836,7 +826,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/LLKOK_deduction"
@@ -899,7 +888,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/LLOther_deduction"
@@ -1158,7 +1146,7 @@
                     android:elevation="12dp"
                     app:cardCornerRadius="25dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lav_actionBar"
+                    app:layout_constraintTop_toBottomOf="@id/LLSpiner"
                     tools:ignore="MissingConstraints">
 
 
@@ -1178,21 +1166,6 @@
 
                 </androidx.cardview.widget.CardView>
 
-
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/lav_actionBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="0dp"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/LLSpiner"
-                    app:lottie_autoPlay="true"
-                    app:lottie_fileName="homepage.json"
-                    app:lottie_loop="true" />
 
                 <LinearLayout
                     android:id="@+id/LLSpiner"
@@ -1223,7 +1196,7 @@
                         style="@style/TEXT"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
-                        app:layout_constraintBottom_toTopOf="@+id/lav_actionBar"/>
+                        app:layout_constraintBottom_toTopOf="@+id/LLSpiner"/>
 
                 </LinearLayout>
 

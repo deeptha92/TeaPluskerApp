@@ -1,5 +1,8 @@
 package com.example.Modal;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 public class EmployeeModalClass {
     int id;
     String supplier_name;
@@ -304,4 +307,6 @@ public class EmployeeModalClass {
     public void setSupplier_name(String supplier_name) {
         this.supplier_name = supplier_name;
     }
+
+
 }
