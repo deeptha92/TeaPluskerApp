@@ -1,13 +1,8 @@
-package com.example.TeaPlucker;
+package com.example.Modal;
 
 public class SupplierModalClass {
     String supplier_name;
     String supplier_id;
-
-    public SupplierModalClass(String supplier_id, String supplier_name) {
-        this.supplier_name = supplier_name;
-        this.supplier_id = supplier_id;
-    }
 
     public String getSupplier_name() {
         return supplier_name;

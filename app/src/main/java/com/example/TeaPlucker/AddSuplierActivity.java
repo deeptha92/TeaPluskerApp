@@ -9,7 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
+import com.example.Helper.DatabaseHelperClass;
+import com.example.Modal.SupplierModalClass;
 
 public class AddSuplierActivity extends AppCompatActivity {
     EditText Et_id, Et_name;
@@ -30,11 +31,13 @@ public class AddSuplierActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String_id = Et_id.getText().toString();
-                String_name = Et_name.getText().toString();
+                String_name = Et_name.getText().toString()+" / "+String_id;
                 try {
                     if (!Et_id.getText().toString().isEmpty() && !Et_name.getText().toString().isEmpty()) {
                         DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass(AddSuplierActivity.this);
-                        SupplierModalClass supplierModalClass = new SupplierModalClass(String_id, String_name);
+                        SupplierModalClass supplierModalClass = new SupplierModalClass();
+                        supplierModalClass.setSupplier_id(String_id);
+                        supplierModalClass.setSupplier_name(String_name);
                         databaseHelperClass.addSuppliers(supplierModalClass);
                         Toast.makeText(AddSuplierActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
                         Intent myIntent = new Intent(AddSuplierActivity.this, MainActivity.class);

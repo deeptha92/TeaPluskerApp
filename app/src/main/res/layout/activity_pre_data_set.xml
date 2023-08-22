@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddSuplierActivity"
+    style="@style/SCREEN">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           tools:ignore="Suspicious0dp"
+           android:padding="20dp">
+
+           <TextView
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:text="Green Tea Price"
+               android:gravity="center"
+               style="@style/TEXT"/>
+
+           <EditText
+               android:id="@+id/Et_Id"
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:inputType="number"
+               style="@style/TEXT"
+               android:textSize="15dp"
+               android:padding="15dp" />
+
+           <TextView
+               android:id="@+id/TvFinalGt"
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:visibility="gone"
+               android:text=""
+               android:gravity="center"
+               style="@style/TEXT"/>
+
+       </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="Suspicious0dp"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Transport price"
+                android:gravity="center"
+                style="@style/TEXT"/>
+
+            <EditText
+                android:id="@+id/Et_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/TEXT"
+                android:inputType="number"
+                android:padding="15dp"
+                android:textSize="15dp"/>
+
+            <TextView
+                android:id="@+id/TvFinaltr"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:text=""
+                android:gravity="center"
+                style="@style/TEXT"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="Suspicious0dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/Btn_back"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="BACK"
+                app:cornerRadius="15dp"
+                android:layout_marginTop="30dp"
+                style="@style/TEXT"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/Brn_Add_Supplier"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ADD"
+                app:cornerRadius="15dp"
+                android:layout_marginTop="30dp"
+                style="@style/TEXT"/>
+
+
+        </LinearLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lav_add_data"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="100dp"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="add_product.json"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

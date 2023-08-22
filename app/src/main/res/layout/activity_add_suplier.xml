@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddSuplierActivity"
-    android:background="@color/black">
+    style="@style/SCREEN">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,17 +26,16 @@
                android:layout_weight=".6"
                android:text="SUPPLIER ID"
                android:gravity="center"
-               android:textColor="@color/white"/>
+               style="@style/TEXT"/>
 
            <EditText
                android:id="@+id/Et_Id"
                android:layout_width="0dp"
                android:layout_height="match_parent"
                android:layout_weight="1"
-               android:textColor="@color/white"
+               style="@style/TEXT"
                android:hint="ID"
                android:textSize="15dp"
-               android:background="@drawable/rounded_corner_edittext"
                android:padding="15dp" />
 
        </LinearLayout>
@@ -54,19 +53,17 @@
                 android:layout_weight=".6"
                 android:text="SUPPLIER NAME"
                 android:gravity="center"
-                android:textColor="@color/white"/>
+                style="@style/TEXT"/>
 
             <EditText
                 android:id="@+id/Et_name"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textColor="@color/white"
+                style="@style/TEXT"
                 android:hint="Name"
                 android:padding="15dp"
-                android:textSize="15dp"
-                android:background="@drawable/rounded_corner_edittext"/>
-
+                android:textSize="15dp"/>
 
 
         </LinearLayout>
@@ -83,10 +80,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="BACK"
-                android:backgroundTint="@color/purple_700"
                 app:cornerRadius="15dp"
                 android:layout_marginTop="30dp"
-                android:textColor="@color/white"/>
+                style="@style/BUTTON"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/Brn_Add_Supplier"
@@ -96,7 +92,7 @@
                 android:text="ADD"
                 app:cornerRadius="15dp"
                 android:layout_marginTop="30dp"
-                android:textColor="@color/black"/>
+                style="@style/BUTTON_D"/>
 
 
         </LinearLayout>

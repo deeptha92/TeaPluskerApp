@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@drawable/tealeaves_3_bk"
     tools:ignore="ScrollViewCount">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
 
         <LinearLayout
@@ -31,25 +31,25 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
+                android:alpha="0.7"
+                android:background="@drawable/border_layout"
                 android:layout_marginRight="20dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <com.airbnb.lottie.LottieAnimationView
+                <ImageView
                     android:id="@+id/lav_form"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_gravity="center"
+                    android:padding="40dp"
+                    android:src="@drawable/add_details"
                     android:layout_marginStart="0dp"
                     android:layout_marginEnd="0dp"
-                    android:background="@drawable/rounded_corner_home_button"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
                     app:layout_constraintStart_toStartOf="@+id/constraintLayout"
-                    app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-                    app:lottie_autoPlay="true"
-                    app:lottie_fileName="laptop-working.json"
-                    app:lottie_loop="true" />
+                    app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -57,11 +57,12 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="0dp"
                     android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="12dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:scaleType="centerCrop"
                     android:text="Add Details Form"
-                    android:textColor="@color/white"
+                    style="@style/TEXT"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -72,24 +73,25 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
+                android:alpha="0.7"
+                android:visibility="invisible"
+                android:background="@drawable/border_layout"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <com.airbnb.lottie.LottieAnimationView
+                <ImageView
                     android:id="@+id/lav_sync"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_gravity="center"
+                    android:padding="40dp"
                     android:layout_marginStart="0dp"
                     android:layout_marginEnd="0dp"
-                    android:background="@drawable/rounded_corner_home_button"
+                    android:src="@drawable/sync_details"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
                     app:layout_constraintStart_toStartOf="@+id/constraintLayout"
-                    app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-                    app:lottie_autoPlay="true"
-                    app:lottie_fileName="windy-icon.json"
-                    app:lottie_loop="true" />
+                    app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -98,10 +100,11 @@
                     android:layout_marginStart="0dp"
                     android:layout_marginEnd="0dp"
                     android:layout_weight="1"
+                    android:layout_marginBottom="12dp"
                     android:gravity="center"
                     android:scaleType="centerCrop"
                     android:text="Sync/Save to Device"
-                    android:textColor="@color/white"
+                    style="@style/TEXT"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -131,7 +134,7 @@
                 android:gravity="center"
                 android:scaleType="centerCrop"
                 android:text="Hello"
-                android:textColor="@color/white"
+                style="@style/TEXT"
                 android:textSize="20sp" />
 
         </LinearLayout>
@@ -154,24 +157,67 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginRight="20dp"
+                android:background="@drawable/border_layout"
                 android:layout_weight="1"
+                android:alpha="0.7"
+                android:visibility="invisible"
                 android:orientation="vertical">
 
-                <com.airbnb.lottie.LottieAnimationView
+                <ImageView
                     android:id="@+id/lav_viewDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:src="@drawable/delete_details"
+                    android:layout_gravity="center"
+                    android:padding="40dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+                    app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+                    app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:scaleType="centerCrop"
+                    android:text="Delete Details"
+                    style="@style/TEXT"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:background="@drawable/border_layout"
+                android:layout_weight="1"
+                android:visibility="invisible"
+                android:alpha="0.7"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/lav_add_supplier"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="0dp"
+                    android:padding="40dp"
+                    android:src="@drawable/add_peoples"
                     android:layout_marginEnd="0dp"
-                    android:background="@drawable/rounded_corner_home_button"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
                     app:layout_constraintStart_toStartOf="@+id/constraintLayout"
-                    app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-                    app:lottie_autoPlay="true"
-                    app:lottie_fileName="on-the-phone.json"
-                    app:lottie_loop="true" />
+                    app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -180,10 +226,68 @@
                     android:layout_marginStart="0dp"
                     android:layout_marginEnd="0dp"
                     android:layout_weight="1"
+                    android:layout_marginBottom="12dp"
                     android:gravity="center"
                     android:scaleType="centerCrop"
-                    android:text="Delete Details"
-                    android:textColor="@color/white"
+                    android:text="Add Suppliers"
+                    style="@style/TEXT"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LLThird"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="19dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/LLSecondLable"
+            tools:layout_editor_absoluteX="19dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/border_layout"
+                android:layout_weight="1"
+                android:visibility="invisible"
+                android:alpha="0.7"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/lav_setPreData"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/preset_data"
+                    android:padding="40dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+                    app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+                    app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center"
+                    android:scaleType="centerCrop"
+                    android:text="Set PreData"
+                    style="@style/TEXT"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -195,23 +299,21 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_weight="1"
+                android:visibility="invisible"
                 android:orientation="vertical">
 
                 <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/lav_add_supplier"
+                    android:id="@+id/lav_add_supplier2"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="0dp"
                     android:layout_marginEnd="0dp"
-                    android:background="@drawable/rounded_corner_home_button"
+                    style="@style/SCREEN"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
                     app:layout_constraintStart_toStartOf="@+id/constraintLayout"
-                    app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-                    app:lottie_autoPlay="true"
-                    app:lottie_fileName="homepage.json"
-                    app:lottie_loop="true" />
+                    app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -223,7 +325,7 @@
                     android:gravity="center"
                     android:scaleType="centerCrop"
                     android:text="Add Suppliers"
-                    android:textColor="@color/white"
+                    style="@style/TEXT"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -251,7 +353,7 @@
                 android:gravity="center"
                 android:scaleType="centerCrop"
                 android:text="Hello"
-                android:textColor="@color/white"
+                style="@style/TEXT"
                 android:textSize="20sp" />
 
             <TextView
@@ -263,7 +365,7 @@
                 android:gravity="center"
                 android:scaleType="centerCrop"
                 android:text="Hello"
-                android:textColor="@color/white"
+                style="@style/TEXT"
                 android:textSize="20sp" />
 
         </LinearLayout>
@@ -288,7 +390,7 @@
                 android:layout_weight="1"
                 android:background="@color/design_default_color_error"
                 android:gravity="center"
-                android:textColor="@color/white"
+                style="@style/TEXT"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -306,7 +408,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/lav_topbar">
+            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/status1"
@@ -315,12 +417,25 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_weight="5"
                 android:gravity="center"
-                android:text="TEA PLUCKER APP"
-                android:textColor="@color/white"
+                style="@style/BUTTON"
+                android:text="@string/title"
+                android:fontFamily="sans-serif"
                 android:textSize="30sp" />
+
+            <ImageView
+                android:id="@+id/IvLogout"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                style="@style/BUTTON"
+                android:padding="15dp"
+                android:src="@drawable/logout_icn"
+                android:layout_weight="1">
+
+            </ImageView>
 
 
         </LinearLayout>
@@ -368,21 +483,6 @@
             app:lottie_loop="true"
             tools:ignore="MissingConstraints" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lav_topbar"
-            android:layout_width="0dp"
-            android:layout_height="250dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_corner_home_button"
-            app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
-            app:layout_constraintStart_toStartOf="@+id/constraintLayout"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="dance-party.json"
-            app:lottie_loop="true" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

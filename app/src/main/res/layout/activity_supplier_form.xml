@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    style="@style/SCREEN_2"
     tools:context=".SupplierFormActivity">
 
 
@@ -28,7 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
-        android:background="@color/black"
+        android:background="@drawable/background_form"
         tools:layout_editor_absoluteY="-168dp">
 
         <androidx.cardview.widget.CardView
@@ -62,13 +61,13 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/CLtop"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingBottom="12dp"
-                android:background="@color/black"
+                android:background="@drawable/background_form"
                 tools:ignore="ExtraText">
 
                 <LinearLayout
-                    android:id="@+id/LLGreentea"
+                    android:id="@+id/LLLabelEarning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
@@ -80,11 +79,75 @@
                     tools:ignore="NotSibling">
 
                     <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        style="@style/TEXT"
+                        android:text="Green Tea"
+                        android:visibility="invisible"
+                        android:textSize="20sp"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/tv_lbl_quantity"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        style="@style/TEXT"
+                        android:textSize="18sp"
+                        android:text="Qua"
+                        android:paddingRight="12dp"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/tv_lbl_unitPrice"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:text="Price/Unit"
+                        style="@style/TEXT"
+                        android:textSize="18sp"
+                        android:paddingRight="12dp"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/tv_lbl_total"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        style="@style/TEXT"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:enabled="false"
+                        android:text="Total"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:paddingRight="12dp"
+                        tools:ignore="MissingConstraints" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/LLGreentea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/LLLabelEarning"
+                    tools:ignore="NotSibling">
+
+                    <TextView
                         android:id="@+id/tv_green_tea"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
+                        style="@style/TEXT"
                         android:text="Green Tea"
                         android:textSize="20sp"
                         tools:ignore="MissingConstraints" />
@@ -96,11 +159,8 @@
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:textSize="25sp"
-                        android:textStyle="bold"
-                        android:text="123"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -112,10 +172,8 @@
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -124,14 +182,12 @@
                         android:id="@+id/et_price_gt"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:enabled="false"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -158,22 +214,25 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
-                        android:text="Additional Earnings"
+                        style="@style/TEXT"
+                        android:text="A.Earning"
                         android:textSize="20sp"
-                        tools:ignore="MissingConstraints" />
+                        tools:ignore="MissingConstraints"
+                        android:ellipsize = "marquee"
+                        android:fadingEdge = "horizontal"
+                        android:marqueeRepeatLimit = "marquee_forever"
+                        android:scrollHorizontally = "true"
+                        android:singleLine = "true"/>
 
                     <EditText
                         android:id="@+id/et_quantity_ae"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -185,10 +244,8 @@
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -197,13 +254,11 @@
                         android:id="@+id/et_price_ae"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -233,10 +288,8 @@
                         android:layout_height="40dp"
                         android:layout_weight="1"
                         android:visibility="invisible"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:ellipsize="end"
                         android:gravity="right"
                         tools:ignore="MissingConstraints" />
@@ -246,7 +299,7 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
+                        style="@style/TEXT"
                         android:text="Total"
                         android:textSize="20sp"
                         tools:ignore="MissingConstraints" />
@@ -254,14 +307,12 @@
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:visibility="invisible"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -271,13 +322,11 @@
                         android:id="@+id/et_total_earnings"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -287,17 +336,92 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/LLLbl_Deduction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/LLDeduction"
+                    tools:ignore="NotSibling">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:text="Cash Advance"
+                        style="@style/TEXT"
+                        android:textSize="18sp"
+                        android:visibility="invisible"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        style="@style/TEXT"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:text="Qua"
+                        tools:ignore="MissingConstraints" />
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        style="@style/TEXT"
+                        android:layout_weight="1"
+                        android:textSize="18sp"
+                        android:ellipsize="end"
+                        android:visibility="gone"
+                        android:gravity="right"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/tv_unitPrice"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        style="@style/TEXT"
+                        android:layout_weight="1"
+                        android:textSize="18sp"
+                        android:ellipsize="end"
+                        android:text="Price/Unit"
+                        android:gravity="center"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/tv_total"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        style="@style/TEXT"
+                        android:layout_weight="1"
+                        android:textSize="18sp"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:text="Total"
+                        tools:ignore="MissingConstraints" />
+
+
+
+
+                </LinearLayout>
+
+
 
                 <LinearLayout
                     android:id="@+id/LLCashAdvance_deduction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:visibility="gone"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/LLDeduction"
+                    app:layout_constraintTop_toBottomOf="@id/LLLbl_Deduction"
                     tools:ignore="NotSibling">
 
                     <TextView
@@ -306,21 +430,19 @@
                         android:layout_height="50dp"
                         android:layout_weight="1"
                         android:text="Cash Advance"
-                        android:textColor="@color/white"
+                        style="@style/TEXT"
                         android:textSize="18sp"
                         tools:ignore="MissingConstraints" />
 
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:visibility="invisible"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         tools:ignore="MissingConstraints" />
 
 
@@ -328,11 +450,9 @@
                         android:id="@+id/et_quantity_ca_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:ellipsize="end"
                         android:visibility="gone"
                         android:gravity="right"
@@ -342,11 +462,9 @@
                         android:id="@+id/et_unitPrice_ca_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:paddingRight="12dp"
@@ -357,11 +475,9 @@
                         android:id="@+id/et_price_ca_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:paddingRight="12dp"
@@ -389,7 +505,7 @@
                         android:id="@+id/tv_welfare_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/white"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:text="Welfare"
                         android:textSize="20sp"
@@ -398,14 +514,12 @@
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:visibility="invisible"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         tools:ignore="MissingConstraints" />
 
 
@@ -413,11 +527,9 @@
                         android:id="@+id/et_quantity_wf_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:ellipsize="end"
                         android:visibility="gone"
                         android:gravity="right"
@@ -427,11 +539,9 @@
                         android:id="@+id/et_unitPrice_wf_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:paddingRight="12dp"
@@ -442,13 +552,11 @@
                         android:id="@+id/et_price_wf_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -473,7 +581,7 @@
                         android:id="@+id/tv_transport_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/white"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:text="Transport"
                         android:textSize="20sp"
@@ -483,13 +591,11 @@
                         android:id="@+id/et_quantity_tp_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -501,10 +607,8 @@
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -513,13 +617,11 @@
                         android:id="@+id/et_price_tp_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -546,7 +648,7 @@
                         android:id="@+id/tv_manure_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/white"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:text="Manure"
                         android:textSize="20sp"
@@ -556,13 +658,11 @@
                         android:id="@+id/et_quantity_mr_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -574,10 +674,8 @@
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -586,13 +684,11 @@
                         android:id="@+id/et_price_mr_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -620,7 +716,7 @@
                         android:layout_height="40dp"
                         android:layout_weight="1"
                         android:text="Made Tea"
-                        android:textColor="@color/white"
+                        style="@style/TEXT"
                         android:textSize="20sp"
                         tools:ignore="MissingConstraints" />
 
@@ -628,13 +724,11 @@
                         android:id="@+id/et_quantity_mt_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -646,10 +740,8 @@
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -658,13 +750,11 @@
                         android:id="@+id/et_price_mt_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -690,10 +780,10 @@
                         android:id="@+id/tv_kok_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/white"
+                        style="@style/TEXT"
                         android:layout_weight="1"
-                        android:text="KOK Products"
-                        android:textSize="20sp"
+                        android:text="KOK Deduct"
+                        android:textSize="15sp"
                         tools:ignore="MissingConstraints" />
 
                     <EditText
@@ -702,11 +792,9 @@
                         android:layout_height="40dp"
                         android:ellipsize="end"
                         android:gravity="right"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -718,10 +806,8 @@
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -732,11 +818,9 @@
                         android:layout_height="40dp"
                         android:ellipsize="end"
                         android:gravity="right"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -762,23 +846,21 @@
                         android:id="@+id/tv_other_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/white"
+                        style="@style/TEXT"
                         android:layout_weight="1"
-                        android:text="Other deduction"
-                        android:textSize="20sp"
+                        android:text="Oth. Deduct"
+                        android:textSize="15sp"
                         tools:ignore="MissingConstraints" />
 
                     <EditText
                         android:id="@+id/et_quantity_ot_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -790,10 +872,8 @@
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -802,13 +882,11 @@
                         android:id="@+id/et_price_ot_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -835,10 +913,8 @@
                         android:layout_height="40dp"
                         android:layout_weight="1"
                         android:visibility="invisible"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:ellipsize="end"
                         android:gravity="right"
                         tools:ignore="MissingConstraints" />
@@ -848,7 +924,7 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
+                        style="@style/TEXT"
                         android:text="Total"
                         android:textSize="20sp"
                         android:paddingRight="12dp"
@@ -858,9 +934,78 @@
                     <EditText
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/TEXT"
                         android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:visibility="invisible"
+                        android:gravity="right"
+                        android:textSize="25sp"
+                        android:paddingRight="12dp"
+                        android:inputType="number"
+                        tools:ignore="MissingConstraints" />
+
+
+                    <EditText
+                        android:id="@+id/et_total_deduction"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        style="@style/TEXT"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:textSize="25sp"
+                        android:paddingRight="12dp"
+                        android:inputType="number"
+                        tools:ignore="MissingConstraints" />
+
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/LLTotalSum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="90dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    style="@style/SCREEN_2"
+                    android:alpha="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/LLTotalDeduction"
+                    tools:ignore="NotSibling">
+
+
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight=".1"
+                        android:visibility="invisible"
+                        style="@style/TEXT"
+                        android:textSize="25sp"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        style="@style/TEXT"
+                        android:text="Net Total"
+                        android:textSize="30sp"
+                        android:paddingRight="12dp"
+                        android:inputType="number"
+                        tools:ignore="MissingConstraints" />
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        style="@style/TEXT"
+                        android:layout_weight=".1"
                         android:ellipsize="end"
                         android:visibility="invisible"
                         android:gravity="right"
@@ -872,16 +1017,14 @@
 
 
                     <EditText
-                        android:id="@+id/et_total_deduction"
+                        android:id="@+id/et_total_sum"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/rounded_corner_edit"
+                        style="@style/SCREEN_2"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
-                        android:textSize="25sp"
-                        android:textStyle="bold"
+                        android:textSize="30sp"
                         android:paddingRight="12dp"
                         android:inputType="number"
                         tools:ignore="MissingConstraints" />
@@ -894,19 +1037,17 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/LLOther_deduction"
+                    app:layout_constraintTop_toBottomOf="@+id/LLTotalSum"
                     android:layout_marginTop="60dp">
 
                     <Button
                         android:id="@+id/button_back"
                         android:layout_width="0dp"
                         android:layout_weight="1"
+                        style="@style/BUTTON_D"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/purple_700"
                         android:layout_marginStart="12dp"
-                        android:textColor="@color/white"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:layout_marginEnd="12dp"
                         android:layout_marginTop="20dp"
                         android:text="HOME"/>
@@ -916,11 +1057,9 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/purple_500"
+                        style="@style/BUTTON"
                         android:layout_marginStart="12dp"
-                        android:textColor="@color/white"
                         android:textSize="25sp"
-                        android:textStyle="bold"
                         android:layout_marginEnd="12dp"
                         android:layout_marginTop="20dp"
                         android:text="ADD"/>
@@ -936,17 +1075,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:background="@drawable/rounded_corner"
+                    style="@style/SCREEN_2"
+                    android:alpha="0.5"
                     app:layout_constraintTop_toTopOf="@id/view">
 
 
 
                     <TextView
                         android:id="@+id/tv_earning"
-                        style="@style/TextAppearance.AppCompat.Title"
+                        style="@style/TEXT"
                         android:layout_width="0dp"
-                        android:textColor="@color/white"
-                        android:background="@color/black"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_marginLeft="12dp"
@@ -961,7 +1099,7 @@
                         android:id="@+id/btn_more"
                         android:layout_width="0dp"
                         android:layout_height="35dp"
-                        android:textColor="@color/white"
+                        style="@style/TEXT"
                         android:layout_marginEnd="12dp"
                         android:layout_marginRight="8dp"
                         android:layout_weight=".1"
@@ -977,22 +1115,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="60dp"
-                    android:background="@drawable/rounded_corner"
+                    style="@style/SCREEN_2"
+                    android:alpha="0.5"
                     app:layout_constraintTop_toTopOf="@id/view_two">
 
 
 
                     <TextView
                         android:id="@+id/tv_deduction"
-                        style="@style/TextAppearance.AppCompat.Title"
+                        style="@style/TEXT"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_marginLeft="12dp"
                         android:layout_weight="1"
                         android:text="Deduction"
-                        android:background="@color/black"
-                        android:textColor="@color/white"
                         android:textSize="30sp"
                         app:layout_constraintEnd_toStartOf="@+id/btn_more_deduction"
                         app:layout_constraintStart_toEndOf="@+id/view_two"
@@ -1001,7 +1138,7 @@
                     <Button
                         android:id="@+id/btn_more_deduction"
                         android:layout_width="0dp"
-                        android:textColor="@color/white"
+                        style="@style/TEXT"
                         android:layout_height="35dp"
                         android:layout_marginEnd="12dp"
                         android:layout_marginRight="8dp"
@@ -1069,11 +1206,11 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:text="SUPPLER NAME"
+                        android:text="SUPPLIER NAME"
                         android:textSize="20dp"
                         android:gravity="center"
                         android:layout_gravity="center"
-                        android:textColor="@color/purple_500"
+                        style="@style/TEXT"
                         android:layout_marginStart="12dp"
                         tools:ignore="RtlCompat" />
 
@@ -1083,7 +1220,7 @@
                         android:layout_weight="1"
                         android:layout_height="40dp"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:background="@color/purple_500"
+                        style="@style/TEXT"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         app:layout_constraintBottom_toTopOf="@+id/lav_actionBar"/>

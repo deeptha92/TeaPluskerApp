@@ -4,39 +4,35 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.airbnb.lottie.Cancellable;
 import com.airbnb.lottie.LottieAnimationView;
-import com.airbnb.lottie.LottieComposition;
+import com.example.Helper.CSVWriter;
+import com.example.Helper.DatabaseHelperClass;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,9 +42,11 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
     private static final int STORAGE_EXTERNAL_STORAGE = 0;
     public static final String TAG = "MainActivity-->";
-    LottieAnimationView lav_form, loading, lav_sync, LVsuccess, LVwarning, lav_viewDetails, lav_add_supplier;
-    LinearLayout LLFirst, LLSecond, linearLayout, LLSecondLable, LLdetails, LLMessage;
+    private ImageView lav_form, lav_setPreData, lav_sync,lav_viewDetails, lav_add_supplier;
+    LottieAnimationView loading, LVsuccess, LVwarning ;
+    LinearLayout LLFirst, LLSecond, LLThird, linearLayout, LLSecondLable, LLdetails, LLMessage;
     TextView tvMessage;
+    private ImageView IvLogout;
     private SQLiteDatabase sqLiteDatabase;
     String newDateStr;
 
@@ -61,9 +59,11 @@ public class MainActivity extends AppCompatActivity {
         lav_form = findViewById(R.id.lav_form);
         lav_viewDetails = findViewById(R.id.lav_viewDetails);
         lav_add_supplier = findViewById(R.id.lav_add_supplier);
+        lav_setPreData = findViewById(R.id.lav_setPreData);
         loading = findViewById(R.id.loading);
         LLFirst = findViewById(R.id.LLfirst);
         LLSecond = findViewById(R.id.LLsecond);
+        LLThird = findViewById(R.id.LLThird);
         linearLayout = findViewById(R.id.linearLayout);
         LLSecondLable = findViewById(R.id.LLSecondLable);
         lav_sync = findViewById(R.id.lav_sync);
@@ -72,13 +72,58 @@ public class MainActivity extends AppCompatActivity {
         LVwarning = findViewById(R.id.LVwarning);
         tvMessage = findViewById(R.id.tvMessage);
         LLMessage = findViewById(R.id.LLMessage);
+        IvLogout = findViewById(R.id.IvLogout);
 
         Date c = Calendar.getInstance().getTime();
 
 
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
         newDateStr = df.format(c);
-        Log.d(TAG, "onCreate: "+ newDateStr);
+        Log.d(TAG, "onCreate: " + newDateStr);
+
+        IvLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences settings = MainActivity.this.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
+                settings.edit().clear().apply();
+                Intent loginActivityIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(loginActivityIntent);
+            }
+        });
+        lav_setPreData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LLFirst.setVisibility(View.INVISIBLE);
+                LLSecond.setVisibility(View.INVISIBLE);
+                LLThird.setVisibility(View.INVISIBLE);
+                linearLayout.setVisibility(View.GONE);
+                LLSecondLable.setVisibility(View.GONE);
+                loading.setVisibility(View.VISIBLE);
+                loading.playAnimation();
+
+                final Handler handler2 = new Handler(Looper.getMainLooper());
+                handler2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent myIntent = new Intent(MainActivity.this, PreDataSetActivity.class);
+                        MainActivity.this.startActivity(myIntent);
+
+
+                        loading.setVisibility(View.GONE);
+                        loading.pauseAnimation();
+                        LLFirst.setVisibility(View.VISIBLE);
+                        LLSecond.setVisibility(View.VISIBLE);
+                        LLThird.setVisibility(View.VISIBLE);
+                        linearLayout.setVisibility(View.GONE);
+                        LLSecondLable.setVisibility(View.GONE);
+
+                    }
+                }, 3000);
+
+
+            }
+
+        });
 
 
         lav_form.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
                 LLFirst.setVisibility(View.INVISIBLE);
                 LLSecond.setVisibility(View.INVISIBLE);
+                LLThird.setVisibility(View.INVISIBLE);
                 linearLayout.setVisibility(View.GONE);
                 LLSecondLable.setVisibility(View.GONE);
                 loading.setVisibility(View.VISIBLE);
@@ -104,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                         loading.pauseAnimation();
                         LLFirst.setVisibility(View.VISIBLE);
                         LLSecond.setVisibility(View.VISIBLE);
+                        LLThird.setVisibility(View.VISIBLE);
                         linearLayout.setVisibility(View.GONE);
                         LLSecondLable.setVisibility(View.GONE);
 
@@ -128,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 LLFirst.setVisibility(View.INVISIBLE);
                 LLSecond.setVisibility(View.INVISIBLE);
+                LLThird.setVisibility(View.INVISIBLE);
                 linearLayout.setVisibility(View.GONE);
                 LLSecondLable.setVisibility(View.GONE);
                 loading.setVisibility(View.VISIBLE);
@@ -143,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
                         loading.pauseAnimation();
                         LLFirst.setVisibility(View.VISIBLE);
                         LLSecond.setVisibility(View.VISIBLE);
+                        LLThird.setVisibility(View.VISIBLE);
                         linearLayout.setVisibility(View.GONE);
                         LLSecondLable.setVisibility(View.GONE);
 
@@ -157,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 LLFirst.setVisibility(View.INVISIBLE);
                 LLSecond.setVisibility(View.INVISIBLE);
+                LLThird.setVisibility(View.INVISIBLE);
                 linearLayout.setVisibility(View.GONE);
                 LLSecondLable.setVisibility(View.GONE);
                 loading.setVisibility(View.VISIBLE);
@@ -172,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
                         loading.pauseAnimation();
                         LLFirst.setVisibility(View.VISIBLE);
                         LLSecond.setVisibility(View.VISIBLE);
+                        LLThird.setVisibility(View.VISIBLE);
                         linearLayout.setVisibility(View.GONE);
                         LLSecondLable.setVisibility(View.GONE);
 
@@ -224,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
         LLFirst.setVisibility(View.INVISIBLE);
         linearLayout.setVisibility(View.GONE);
         LLSecond.setVisibility(View.INVISIBLE);
+        LLThird.setVisibility(View.INVISIBLE);
         LLSecondLable.setVisibility(View.GONE);
 
 
@@ -233,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
             Objects.requireNonNull(exportDir.getParentFile()).mkdirs();
         }
 
-        File file = new File(exportDir, ""+newDateStr+".csv");
+        File file = new File(exportDir, "" + newDateStr + ".csv");
         try {
 //            file.mkdirs();
             file.createNewFile();
@@ -243,6 +295,11 @@ public class MainActivity extends AppCompatActivity {
             Cursor curCSV = db.rawQuery("SELECT * FROM SUPPLIER", null);
             csvWrite.writeNext(curCSV.getColumnNames());
             while (curCSV.moveToNext()) {
+//                String nameId = curCSV.getString(1);
+//
+//                String[] separated = nameId.split("/");
+//                String name = separated[0];
+//                String id = separated[1];
                 //Which column you want to exprort
                 String arrStr[] = {curCSV.getString(0),
                         curCSV.getString(1),
@@ -263,9 +320,20 @@ public class MainActivity extends AppCompatActivity {
                         curCSV.getString(16),
                         curCSV.getString(17),
                         curCSV.getString(18),
-                        curCSV.getString(19)};
+                        curCSV.getString(19),
+                        curCSV.getString(20),
+                        curCSV.getString(21),
+                        curCSV.getString(22),
+                        curCSV.getString(23),
+                        curCSV.getString(24),
+                        curCSV.getString(25),
+                        curCSV.getString(26),
+                        curCSV.getString(27),
+                        curCSV.getString(28),
+                        curCSV.getString(29),
+                };
                 csvWrite.writeNext(arrStr);
-                Log.d(TAG, "exportDB: "+ "OK");
+                Log.d(TAG, "exportDB: " + "OK");
             }
             LVsuccess.setVisibility(View.VISIBLE);
             LVsuccess.playAnimation();
@@ -285,6 +353,7 @@ public class MainActivity extends AppCompatActivity {
                     LLFirst.setVisibility(View.VISIBLE);
                     linearLayout.setVisibility(View.GONE);
                     LLSecond.setVisibility(View.VISIBLE);
+                    LLThird.setVisibility(View.VISIBLE);
                     LLSecondLable.setVisibility(View.GONE);
                 }
             }, 3000);
@@ -307,6 +376,7 @@ public class MainActivity extends AppCompatActivity {
                     LLFirst.setVisibility(View.VISIBLE);
                     linearLayout.setVisibility(View.GONE);
                     LLSecond.setVisibility(View.VISIBLE);
+                    LLThird.setVisibility(View.VISIBLE);
                     LLSecondLable.setVisibility(View.GONE);
                 }
             }, 3000);

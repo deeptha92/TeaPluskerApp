@@ -7,6 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.Adapters.EmployeeAdapterClass;
+import com.example.Helper.DatabaseHelperClass;
+import com.example.Modal.EmployeeModalClass;
+
 import java.util.List;
 
 public class ViewEmployeeActivity extends AppCompatActivity {

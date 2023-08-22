@@ -5,7 +5,7 @@
     android:focusableInTouchMode="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    style="@style/SCREEN"
     tools:context=".ViewEmployeeActivity">
 
     <androidx.recyclerview.widget.RecyclerView
