@@ -17,6 +17,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,6 +36,9 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static com.example.TeaPlucker.MainActivity.TAG;
 
 public class SupplierFormActivity extends AppCompatActivity {
 
@@ -56,14 +60,15 @@ public class SupplierFormActivity extends AppCompatActivity {
     String suppler_name, quantity_gt, price_gt, quantity_ae, price_ae, quantity_ca_deduction, price_ca_deduction,
             quantity_wf_deduction, price_wf_deduction, quantity_mt_deduction, price_mt_deduction,
             quantity_mr_deduction, price_mr_deduction, quantity_tp_deduction, price_tp_deduction,
-            quantity_kok_deduction, price_kok_deduction, quantity_ot_deduction, price_ot_deduction;
+            quantity_kok_deduction, price_kok_deduction, quantity_ot_deduction, price_ot_deduction,
+            total_earnings, total_deduction, total_sum;
 
     String up_gt, up_ae, up_ca, up_wf, up_mt, up_mr, up_tp, up_kok, up_ot;
 
     String greenTeaPrice_pre, transport_up_pre;
 
     Spinner spinner_supplier;
-    TextView tv_additional_earnings;
+    TextView tv_additional_earnings, TvSuppName;
     List<String> supplier_names = new ArrayList<String>();
     List<String> supplier_id = new ArrayList<String>();
     ArrayAdapter<String> dataAdapter;
@@ -77,6 +82,7 @@ public class SupplierFormActivity extends AppCompatActivity {
     double MrTotalDeduction = 0.0;
     double KokTotalDeduction = 0.0;
     double OtTotalDeduction = 0.0;
+    boolean sameNameOrNot = false;
 
 
     @Override
@@ -148,6 +154,8 @@ public class SupplierFormActivity extends AppCompatActivity {
         LLTotalDeduction = findViewById(R.id.LLTotalDeduction);
         LLTotalEarnings = findViewById(R.id.LLTotalEarning);
 
+        TvSuppName = findViewById(R.id.TvSuppName);
+
         spinner_supplier = (Spinner) findViewById(R.id.spinner_supplier);
         nestedScrollView = findViewById(R.id.nestedScrollView);
 
@@ -185,12 +193,16 @@ public class SupplierFormActivity extends AppCompatActivity {
         String json = sh.getString("myModel", "");
 
         if (!json.isEmpty()) {
+            spinner_supplier.setVisibility(View.GONE);
+            TvSuppName.setVisibility(View.VISIBLE);
             // Convert the JSON string back to a MyModel object
             Gson gson = new Gson();
             EmployeeModalClass myModel = gson.fromJson(json, EmployeeModalClass.class);
 
             Toast.makeText(SupplierFormActivity.this, "S===================", Toast.LENGTH_SHORT).show();
 
+            TvSuppName.setText(myModel.getSupplier_name()+" / "+myModel.getSupplier_id());
+            suppler_name = myModel.getSupplier_name()+" / "+myModel.getSupplier_id();
 
             et_quantity_gt.setText(myModel.getGreentea_qua());
             et_price_gt.setText(myModel.getGreentea_pr());
@@ -220,8 +232,13 @@ public class SupplierFormActivity extends AppCompatActivity {
             et_unitPrice_mt_deduction.setText(myModel.getMt_up());
             et_unitPrice_kok_deduction.setText(myModel.getKok_up());
             et_unitPrice_ot_deduction.setText(myModel.getOther_up());
+            et_total_earnings.setText(myModel.getTotal_earning());
+            et_total_deduction.setText(myModel.getTotal_deduction());
+            et_total_sum.setText(myModel.getTotal_sum());
         } else {
-            quantity_gt = "quantity_gt";
+            spinner_supplier.setVisibility(View.VISIBLE);
+            TvSuppName.setVisibility(View.GONE);
+            quantity_gt = "0";
             price_gt = "0";
             quantity_ae = "0";
             price_ae = "0";
@@ -242,13 +259,13 @@ public class SupplierFormActivity extends AppCompatActivity {
             price_ot_deduction = "0";
 
             up_gt = et_unitPrice_gt.getText().toString();
-            up_ae = "20";
-            up_ca = "10";
-            up_wf = "20";
+            up_ae = "0";
+            up_ca = "0";
+            up_wf = "0";
             up_tp = et_unitPrice_tp_deduction.getText().toString();
-            up_mt = "20";
-            up_mr = "20";
-            up_kok = "20";
+            up_mt = "0";
+            up_mr = "0";
+            up_kok = "0";
             up_ot = "0";
         }
         supplier_names.add("D.M. Ubesena / 01");
@@ -338,6 +355,31 @@ public class SupplierFormActivity extends AppCompatActivity {
         Btnadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String supplier_Name;
+
+                DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass(SupplierFormActivity.this);
+                List<EmployeeModalClass> employeeModalClassList = databaseHelperClass.getEmployeeList();
+
+                String nameId = suppler_name;
+                String[] separated = nameId.split("/");
+                String name = separated[0];
+                int statusDelete = 0;
+
+                for (EmployeeModalClass employeeModalClass1: employeeModalClassList
+                ) {
+                    supplier_Name = employeeModalClass1.getSupplier_name();
+                    Log.d(TAG, "onClick: "+supplier_Name);
+                    Log.d(TAG, "onClick2: "+name);
+
+                    if ((name.contains(supplier_Name)) && statusDelete == 0) {
+                        sameNameOrNot = true;
+                        statusDelete = 1;
+                        databaseHelperClass.deleteSupplier(employeeModalClass1.getSupplier_name());
+
+                    } else {
+                        sameNameOrNot = false;
+                    }
+                }
 
                 if (dataAdapter.isEmpty()) {
                     Toast.makeText(SupplierFormActivity.this, "PLEASE ADD SUPPLIER FIRST", Toast.LENGTH_SHORT).show();
@@ -373,6 +415,9 @@ public class SupplierFormActivity extends AppCompatActivity {
                             price_mr_deduction = et_price_mr_deduction.getText().toString();
                             price_kok_deduction = et_price_kok_deduction.getText().toString();
                             price_ot_deduction = et_price_ot_deduction.getText().toString();
+                            total_earnings = et_total_earnings.getText().toString();
+                            total_deduction = et_total_deduction.getText().toString();
+                            total_sum = et_total_sum.getText().toString();
 
 
                             up_ae = et_unitPrice_ae.getText().toString();
@@ -382,6 +427,9 @@ public class SupplierFormActivity extends AppCompatActivity {
                             up_mr = et_price_mr_deduction.getText().toString();
                             up_kok = et_unitPrice_kok_deduction.getText().toString();
                             up_ot = et_unitPrice_ot_deduction.getText().toString();
+                            up_gt = et_unitPrice_gt.getText().toString();
+                            up_tp = et_unitPrice_tp_deduction.getText().toString();
+
 
 
                             Toast.makeText(SupplierFormActivity.this, price_ot_deduction, Toast.LENGTH_SHORT).show();
@@ -398,8 +446,6 @@ public class SupplierFormActivity extends AppCompatActivity {
                                     DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass(SupplierFormActivity.this);
                                     EmployeeModalClass employeeModalClass = new EmployeeModalClass();
 
-                                    String nameId = suppler_name;
-
                                     String[] separated = nameId.split("/");
                                     String name = separated[0];
                                     String id = separated[1];
@@ -412,10 +458,10 @@ public class SupplierFormActivity extends AppCompatActivity {
                                     employeeModalClass.setAdditional_qua(quantity_ae);
                                     employeeModalClass.setAdditional_up(up_ae);
                                     employeeModalClass.setAdditional_pr(price_ae);
-                                    employeeModalClass.setCash_qua("Cash qua");
+                                    employeeModalClass.setCash_qua(quantity_ca_deduction);
                                     employeeModalClass.setCash_up(up_ca);
                                     employeeModalClass.setCash_pr(price_ca_deduction);
-                                    employeeModalClass.setWelfare_qua("welfare qua");
+                                    employeeModalClass.setWelfare_qua(quantity_wf_deduction);
                                     employeeModalClass.setWelfare_up(up_wf);
                                     employeeModalClass.setWelfare_pr(price_wf_deduction);
                                     employeeModalClass.setTransport_qua(quantity_tp_deduction);
@@ -433,8 +479,16 @@ public class SupplierFormActivity extends AppCompatActivity {
                                     employeeModalClass.setOther_qua(quantity_ot_deduction);
                                     employeeModalClass.setOther_up(up_ot);
                                     employeeModalClass.setOther_pr(price_ot_deduction);
+                                    employeeModalClass.setTotal_earning(total_earnings);
+                                    employeeModalClass.setTotal_deduction(total_deduction);
+                                    employeeModalClass.setTotal_sum(total_sum);
 
                                     databaseHelperClass.addEmployee(employeeModalClass);
+
+                                    if (sameNameOrNot == true) {
+                                        Intent mainActivityIntent = new Intent(SupplierFormActivity.this, MainActivity.class);
+                                        startActivity(mainActivityIntent);
+                                    }
 
                                     Toast.makeText(SupplierFormActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
                                     nestedScrollView.setVisibility(View.VISIBLE);
@@ -493,7 +547,7 @@ public class SupplierFormActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 String string_quantity_gt = et_quantity_gt.getText().toString();
-                String string_unitPrice_gt = up_gt;
+                String string_unitPrice_gt = et_unitPrice_gt.getText().toString();
 
                 if (string_quantity_gt.isEmpty()) {
                     string_quantity_gt = "0";

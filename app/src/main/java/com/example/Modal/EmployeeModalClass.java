@@ -35,6 +35,10 @@ public class EmployeeModalClass {
     String other_up;
     String other_pr;
 
+    String total_earning;
+    String total_deduction;
+    String total_sum;
+
 
 //    public EmployeeModalClass(String supplier_name, String greentea_qua, String greentea_up, String greentea_pr, String additional_qua, String additional_up, String additional_pr, String cash_qua, String cash_up, String cash_pr, String welfare_qua, String welfare_up, String welfare_pr, String mt_qua, String mt_up, String mt_pr, String manure_qua, String manure_up, String manure_pr, String transport_qua, String transport_up, String transport_pr, String kok_qua, String kok_up, String kok_pr, String other_qua, String other_up, String other_pr) {
 //        this.supplier_name = supplier_name;
@@ -308,5 +312,27 @@ public class EmployeeModalClass {
         this.supplier_name = supplier_name;
     }
 
+    public String getTotal_earning() {
+        return total_earning;
+    }
 
+    public void setTotal_earning(String total_earning) {
+        this.total_earning = total_earning;
+    }
+
+    public String getTotal_deduction() {
+        return total_deduction;
+    }
+
+    public void setTotal_deduction(String total_deduction) {
+        this.total_deduction = total_deduction;
+    }
+
+    public String getTotal_sum() {
+        return total_sum;
+    }
+
+    public void setTotal_sum(String total_sum) {
+        this.total_sum = total_sum;
+    }
 }

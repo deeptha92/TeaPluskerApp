@@ -57,6 +57,9 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
 
     public static final String SUPPLIER_NAME = "supplier_name";
     public static final String SUPPLIER_ID = "supplier_id";
+    public static final String TOTAL_EARN = "total_earn";
+    public static final String TOTAL_DEDUCTION = "total_deduction";
+    public static final String TOTAL_SUM = "total_sum";
 
     public static final String GREEN_TEA_UP_PRE = "green_up_pre";
     public static final String TRANSPORT_UP_PRE = "tr_up_pre";
@@ -71,7 +74,7 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
             CASH_UP + " TEXT NOT NULL," + CASH_QUA + " TEXT NOT NULL, " + CASH_PR + " TEXT NOT NULL, " +
             TRANSPORT_QUA + " TEXT NOT NULL, " + TRANSPORT_UP + " TEXT NOT NULL, " + TRANSPORT_PR + " TEXT NOT NULL, " + MANURE_QUA + " TEXT NOT NULL, " +
             MANURE_UP + " TEXT NOT NULL," + MANURE_PR + " TEXT NOT NULL, " + MT_QUA + " TEXT NOT NULL, " + MT_UP + " TEXT NOT NULL, " + MT_PR + " TEXT NOT NULL, " + KOK_QUA + " TEXT NOT NULL, " +
-            KOK_UP + " TEXT NOT NULL," + KOK_PR + " TEXT NOT NULL, " + OTHER_QUA + " TEXT NOT NULL, " + OTHER_UP + " TEXT NOT NULL, " + OTHER_PR + " TEXT NOT NULL);";
+            KOK_UP + " TEXT NOT NULL," + KOK_PR + " TEXT NOT NULL, " + OTHER_QUA + " TEXT NOT NULL, " + OTHER_UP + " TEXT NOT NULL, " + OTHER_PR + " TEXT NOT NULL, " + TOTAL_EARN + " TEXT NOT NULL, " + TOTAL_DEDUCTION + " TEXT NOT NULL, " + TOTAL_SUM + " TEXT NOT NULL);";
 
     private static final String CREATE_TABLE_SUPPLIER = "CREATE TABLE " + TABLE_NAME_SUPPLIER + "(" + ID +
             " INTEGER PRIMARY KEY AUTOINCREMENT," + SUPPLIER_ID + " TEXT NOT NULL," +
@@ -132,6 +135,9 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
         contentValues.put(DatabaseHelperClass.MANURE_PR, employeeModalClass.getManure_pr());
         contentValues.put(DatabaseHelperClass.KOK_PR, employeeModalClass.getKok_pr());
         contentValues.put(DatabaseHelperClass.OTHER_PR, employeeModalClass.getOther_pr());
+        contentValues.put(DatabaseHelperClass.TOTAL_EARN, employeeModalClass.getTotal_earning());
+        contentValues.put(DatabaseHelperClass.TOTAL_DEDUCTION, employeeModalClass.getTotal_deduction());
+        contentValues.put(DatabaseHelperClass.TOTAL_SUM, employeeModalClass.getTotal_sum());
         sqLiteDatabase = getWritableDatabase();
         sqLiteDatabase.insert(DatabaseHelperClass.TABLE_NAME, null, contentValues);
 
@@ -208,6 +214,9 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
                 String OTHER_QUA = cursor.getString(27);
                 String OTHER_UP = cursor.getString(28);
                 String OTHER_PR = cursor.getString(29);
+                String TOTAL_EARN = cursor.getString(30);
+                String TOTAL_DEDUCTION = cursor.getString(31);
+                String TOTAL_SUM = cursor.getString(32);
 
                 EmployeeModalClass employeeModalClass = new EmployeeModalClass();
                 employeeModalClass.setSupplier_name(NAME);
@@ -220,8 +229,10 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
                 employeeModalClass.setAdditional_pr(ADDITIONAL_PR);
                 employeeModalClass.setCash_up(CASH_UP);
                 employeeModalClass.setCash_pr(CASH_PR);
+                employeeModalClass.setCash_qua(CASH_QUA);
                 employeeModalClass.setWelfare_up(WELFARE_UP);
                 employeeModalClass.setWelfare_pr(WELFARE_PR);
+                employeeModalClass.setWelfare_qua(WELFARE_QUA);
                 employeeModalClass.setTransport_qua(TRANSPORT_QUA);
                 employeeModalClass.setTransport_up(TRANSPORT_UP);
                 employeeModalClass.setTransport_pr(TRANSPORT_PR);
@@ -237,6 +248,9 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
                 employeeModalClass.setOther_qua(OTHER_QUA);
                 employeeModalClass.setOther_up(OTHER_UP);
                 employeeModalClass.setOther_pr(OTHER_PR);
+                employeeModalClass.setTotal_earning(TOTAL_EARN);
+                employeeModalClass.setTotal_deduction(TOTAL_DEDUCTION);
+                employeeModalClass.setTotal_sum(TOTAL_SUM);
 
                 storeEmployee.add(employeeModalClass);
 

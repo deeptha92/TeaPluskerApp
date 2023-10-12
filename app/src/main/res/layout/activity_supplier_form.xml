@@ -319,7 +319,7 @@
                         android:id="@+id/et_total_earnings"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        style="@style/TEXT"
+                        style="@style/TEXT_B"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
@@ -937,7 +937,7 @@
                         android:id="@+id/et_total_deduction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        style="@style/TEXT"
+                        style="@style/TEXT_B"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
@@ -1007,8 +1007,8 @@
                     <EditText
                         android:id="@+id/et_total_sum"
                         android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        style="@style/SCREEN_2"
+                        android:layout_height="wrap_content"
+                        style="@style/TEXT_B"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
@@ -1187,6 +1187,20 @@
                         android:layout_marginStart="12dp"
                         tools:ignore="RtlCompat" />
 
+                    <TextView
+                        android:id="@+id/TvSuppName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:textSize="20dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        style="@style/TEXT"
+                        android:visibility="gone"
+                        android:layout_marginStart="12dp"
+                        tools:ignore="RtlCompat" />
+
                     <Spinner
                         android:id="@+id/spinner_supplier"
                         android:layout_width="0dp"
@@ -1195,6 +1209,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         style="@style/TEXT"
                         android:layout_marginStart="12dp"
+                        android:visibility="gone"
                         android:layout_marginEnd="12dp"
                         app:layout_constraintBottom_toTopOf="@+id/LLSpiner"/>
 

@@ -60,6 +60,13 @@ public class EmployeeAdapterClass extends RecyclerView.Adapter<EmployeeAdapterCl
     String other_up;
     String other_pr;
 
+    String total_earning;
+    String total_deduction;
+    String total_sum;
+
+    String supplier_name;
+    String supplier_id;
+
 
     public EmployeeAdapterClass(List<EmployeeModalClass> employee, Context context) {
         this.employee = employee;
@@ -128,6 +135,11 @@ public class EmployeeAdapterClass extends RecyclerView.Adapter<EmployeeAdapterCl
                 other_qua = employeeModalClass.getOther_qua();
                 other_up = employeeModalClass.getOther_up();
                 other_pr = employeeModalClass.getOther_pr();
+                total_earning = employeeModalClass.getTotal_earning();
+                total_deduction = employeeModalClass.getTotal_deduction();
+                total_sum = employeeModalClass.getTotal_sum();
+                supplier_name = employeeModalClass.getSupplier_name();
+                supplier_id = employeeModalClass.getSupplier_id();
 
 //                PopUpClass popUpClass = new PopUpClass();
 //                popUpClass.showPopupWindow(v);
