@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="delete_details">Delete Details</string>
+    <string name="select_supplier">Select Supplier</string>
+    <string name="searching">Search</string>
+    <string name="select_date">Select Date</string>
+    <string name="print">PRINT</string>
+    <string name="back">BACK</string>
+    <string name="print_bill">Print Bill</string>
+    <string name="transaction_id">Transaction Id</string>
+    <string name="supplier_name">SUPPLIER NAME</string>
+    <string name="date">Date</string>
+    <string name="green_tea">Green Tea</string>
+    <string name="view_edit">View/Edit</string>
+    <string name="name">Name</string>
+    <string name="trn_id">TrnId</string>
+    <string name="delete">DELETE</string>
+    <string name="view">VIEW</string>
+    <string name="total_tea">Total Tea</string>
+    <string name="water_deduction">Water Deduction</string>
+    <string name="deduction">Deduction</string>
+    <string name="view_b">view</string>
+    <string name="add">ADD</string>
+    <string name="update">UPDATE</string>
 </resources>

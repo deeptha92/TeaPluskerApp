@@ -185,7 +185,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:scaleType="centerCrop"
-                    android:text="@string/delete_details"
+                    android:text="@string/view_edit"
                     style="@style/TEXT"
                     android:textSize="20sp" />
 

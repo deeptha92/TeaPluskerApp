@@ -1,30 +1,30 @@
 package com.example.TeaPlucker;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.widget.NestedScrollView;
-
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.transition.AutoTransition;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,9 +34,16 @@ import com.example.Modal.EmployeeModalClass;
 import com.example.Modal.SupplierModalClass;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
 
 import static com.example.TeaPlucker.MainActivity.TAG;
 
@@ -45,44 +52,31 @@ public class SupplierFormActivity extends AppCompatActivity {
     LinearLayout LLGreenTea, LLAdition, LLOther_deduction, LLKOK_deduction,
             LLMadeTea_deduction, LLManure_deduction, LLTransport_deduction,
             LLWelfare_deduction, LLCashAdvance_deduction, LLTotalDeduction, LLTotalEarnings, LLLabelEarning, LLLbl_Deduction;
-    Button BtnExpand, BtnExpandDeduction, Btnadd, BtnBack;
+    Button BtnExpand, BtnExpandDeduction, Btnadd, BtnBack, button_update_data;
     NestedScrollView nestedScrollView;
     LottieAnimationView celebrate, loading;
     String String_id, String_name;
-    EditText et_quantity_gt, et_price_gt, et_quantity_ae, et_price_ae, et_quantity_ca_deduction,
-            et_price_ca_deduction, et_quantity_wf_deduction, et_price_wf_deduction, et_quantity_tp_deduction,
-            et_price_tp_deduction, et_quantity_mr_deduction, et_price_mr_deduction, et_quantity_mt_deduction,
-            et_price_mt_deduction, et_quantity_kok_deduction, et_price_kok_deduction, et_quantity_ot_deduction,
-            et_price_ot_deduction, et_unitPrice_gt, et_unitPrice_ae, et_unitPrice_ca_deduction, et_unitPrice_wf_deduction,
-            et_unitPrice_tp_deduction, et_unitPrice_mr_deduction, et_unitPrice_mt_deduction, et_unitPrice_kok_deduction,
-            et_unitPrice_ot_deduction, et_total_earnings, et_total_deduction, et_total_sum;
+    EditText et_quantity_gt, et_quantity_ae, et_quantity_ca_deduction,
+            et_quantity_wf_deduction, et_quantity_tp_deduction,
+            et_quantity_mr_deduction, et_quantity_mt_deduction,
+            et_quantity_kok_deduction, et_quantity_ot_deduction, et_quantity_water, et_quantity_total_tea;
     CardView CvcardView, cvLoading, cvCelebrate;
-    String suppler_name, quantity_gt, price_gt, quantity_ae, price_ae, quantity_ca_deduction, price_ca_deduction,
-            quantity_wf_deduction, price_wf_deduction, quantity_mt_deduction, price_mt_deduction,
-            quantity_mr_deduction, price_mr_deduction, quantity_tp_deduction, price_tp_deduction,
-            quantity_kok_deduction, price_kok_deduction, quantity_ot_deduction, price_ot_deduction,
-            total_earnings, total_deduction, total_sum;
+    String suppler_name, quantity_gt, quantity_water, quantity_total_tea, quantity_ae, quantity_ca_deduction,
+            quantity_wf_deduction, quantity_mt_deduction,
+            quantity_mr_deduction, quantity_tp_deduction,
+            quantity_kok_deduction, quantity_ot_deduction;
 
-    String up_gt, up_ae, up_ca, up_wf, up_mt, up_mr, up_tp, up_kok, up_ot;
-
-    String greenTeaPrice_pre, transport_up_pre;
-
-    Spinner spinner_supplier;
-    TextView tv_additional_earnings, TvSuppName;
+    TextView spinner_supplier;
+    TextView tv_additional_earnings, TvSuppName, TvDate, TvTrId;
     List<String> supplier_names = new ArrayList<String>();
     List<String> supplier_id = new ArrayList<String>();
-    ArrayAdapter<String> dataAdapter;
-
-    double grandTotalDeduction = 0.0;
-
-    double CaTotalDeduction = 0.0;
-    double WfTotalDeduction = 0.0;
-    double MtTotalDeduction = 0.0;
-    double TpTotalDeduction = 0.0;
-    double MrTotalDeduction = 0.0;
-    double KokTotalDeduction = 0.0;
-    double OtTotalDeduction = 0.0;
+    private Button showDatePickerButton;
+    Dialog dialog;
     boolean sameNameOrNot = false;
+    String supplyDate;
+    private int supplier_position = -1;
+    private int incrementedCount = 0;
+    Context context;
 
 
     @Override
@@ -97,6 +91,7 @@ public class SupplierFormActivity extends AppCompatActivity {
         LLLbl_Deduction = findViewById(R.id.LLLbl_Deduction);
 
         BtnBack = findViewById(R.id.button_back);
+        button_update_data = findViewById(R.id.button_update_data);
 
         LLCashAdvance_deduction = findViewById(R.id.LLCashAdvance_deduction);
         LLWelfare_deduction = findViewById(R.id.LLWelfare_deduction);
@@ -107,41 +102,27 @@ public class SupplierFormActivity extends AppCompatActivity {
         LLOther_deduction = findViewById(R.id.LLOther_deduction);
 
         et_quantity_gt = findViewById(R.id.et_quantity_gt);
-        et_price_gt = findViewById(R.id.et_price_gt);
         et_quantity_ae = findViewById(R.id.et_quantity_ae);
-        et_price_ae = findViewById(R.id.et_price_ae);
+        et_quantity_water = findViewById(R.id.et_quantity_water);
+        et_quantity_total_tea = findViewById(R.id.et_quantity_total_tea);
+
         et_quantity_ca_deduction = findViewById(R.id.et_quantity_ca_deduction);
-        et_price_ca_deduction = findViewById(R.id.et_price_ca_deduction);
         et_quantity_wf_deduction = findViewById(R.id.et_quantity_wf_deduction);
-        et_price_wf_deduction = findViewById(R.id.et_price_wf_deduction);
         et_quantity_mt_deduction = findViewById(R.id.et_quantity_mt_deduction);
-        et_price_mt_deduction = findViewById(R.id.et_price_mt_deduction);
         et_quantity_mr_deduction = findViewById(R.id.et_quantity_mr_deduction);
-        et_price_mr_deduction = findViewById(R.id.et_price_mr_deduction);
         et_quantity_tp_deduction = findViewById(R.id.et_quantity_tp_deduction);
-        et_price_tp_deduction = findViewById(R.id.et_price_tp_deduction);
         et_quantity_kok_deduction = findViewById(R.id.et_quantity_kok_deduction);
-        et_price_kok_deduction = findViewById(R.id.et_price_kok_deduction);
         et_quantity_ot_deduction = findViewById(R.id.et_quantity_ot_deduction);
-        et_price_ot_deduction = findViewById(R.id.et_price_ot_deduction);
 
-        et_unitPrice_gt = findViewById(R.id.et_unitPrice_gt);
-        et_unitPrice_ae = findViewById(R.id.et_unitPrice_ae);
-        et_unitPrice_ca_deduction = findViewById(R.id.et_unitPrice_ca_deduction);
-        et_unitPrice_wf_deduction = findViewById(R.id.et_unitPrice_wf_deduction);
-        et_unitPrice_tp_deduction = findViewById(R.id.et_unitPrice_tp_deduction);
-        et_unitPrice_mr_deduction = findViewById(R.id.et_unitPrice_mr_deduction);
-        et_unitPrice_mt_deduction = findViewById(R.id.et_unitPrice_mt_deduction);
-        et_unitPrice_kok_deduction = findViewById(R.id.et_unitPrice_kok_deduction);
-        et_unitPrice_ot_deduction = findViewById(R.id.et_unitPrice_ot_deduction);
-
-        et_total_earnings = findViewById(R.id.et_total_earnings);
-        et_total_deduction = findViewById(R.id.et_total_deduction);
-        et_total_sum = findViewById(R.id.et_total_sum);
         tv_additional_earnings = findViewById(R.id.tv_additional_earnings);
+        TvTrId = findViewById(R.id.TvTrId);
 
 
         Btnadd = findViewById(R.id.button_add_data);
+
+
+        showDatePickerButton = findViewById(R.id.showDatePickerButton);
+        TvDate = (TextView) findViewById(R.id.TvDate);
 
 
         BtnExpand = findViewById(R.id.btn_more);
@@ -149,99 +130,207 @@ public class SupplierFormActivity extends AppCompatActivity {
         BtnExpandDeduction = findViewById(R.id.btn_more_deduction);
 
         celebrate = findViewById(R.id.celebrate);
-        loading = findViewById(R.id.loading);
+        loading = findViewById(R.id.lottieLoading);
 
         LLTotalDeduction = findViewById(R.id.LLTotalDeduction);
         LLTotalEarnings = findViewById(R.id.LLTotalEarning);
 
         TvSuppName = findViewById(R.id.TvSuppName);
 
-        spinner_supplier = (Spinner) findViewById(R.id.spinner_supplier);
+        spinner_supplier = (TextView) findViewById(R.id.spinner_supplier);
         nestedScrollView = findViewById(R.id.nestedScrollView);
 
-        et_unitPrice_gt.setEnabled(false);
-        et_unitPrice_tp_deduction.setEnabled(false);
         et_quantity_tp_deduction.setEnabled(false);
-
-        et_price_gt.setEnabled(false);
-        et_price_ae.setEnabled(false);
-        et_price_ca_deduction.setEnabled(false);
-        et_price_wf_deduction.setEnabled(false);
-        et_price_tp_deduction.setEnabled(false);
-        et_price_ot_deduction.setEnabled(false);
-        et_price_mt_deduction.setEnabled(false);
-        et_price_mr_deduction.setEnabled(false);
-        et_price_kok_deduction.setEnabled(false);
-        et_total_earnings.setEnabled(false);
-        et_total_deduction.setEnabled(false);
-        et_total_sum.setEnabled(false);
-
         tv_additional_earnings.setSelected(true);
+        loading.setVisibility(View.GONE);
+
+
+
+        et_quantity_gt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that characters within `start` and `start + before` are about to be replaced with new text with a length of `count`.
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that somewhere within `start` and `start + before`, the text has been replaced with new text with a length of `count`.
+                int tea_qua;
+                int water_qua;
+                try {
+                    if (et_quantity_gt.getText().toString().isEmpty()) {
+                        tea_qua = 0;
+                    } else {
+                        tea_qua = (int) Double.parseDouble(et_quantity_gt.getText().toString());
+                    }
+                    if (et_quantity_water.getText().toString().isEmpty()) {
+                        water_qua = 0;
+                    } else {
+                        water_qua = (int) Double.parseDouble(et_quantity_water.getText().toString());
+                    }
+                    int totalTea = tea_qua - water_qua;
+                    et_quantity_total_tea.setText(String.valueOf(totalTea));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This method is called to notify you that somewhere within the `Editable`, new text has been inserted or removed.
+                int tea_qua;
+                int water_qua;
+                try {
+                    if (et_quantity_gt.getText().toString().isEmpty()) {
+                        tea_qua = 0;
+                    } else {
+                        tea_qua = (int) Double.parseDouble(et_quantity_gt.getText().toString());
+                    }
+                    if (et_quantity_water.getText().toString().isEmpty()) {
+                        water_qua = 0;
+                    } else {
+                        water_qua = (int) Double.parseDouble(et_quantity_water.getText().toString());
+                    }
+                    int totalTea = tea_qua - water_qua;
+                    et_quantity_total_tea.setText(String.valueOf(totalTea));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        et_quantity_water.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that characters within `start` and `start + before` are about to be replaced with new text with a length of `count`.
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                // This method is called to notify you that somewhere within `start` and `start + before`, the text has been replaced with new text with a length of `count`.
+                int tea_qua;
+                int water_qua;
+                try {
+                    if (et_quantity_gt.getText().toString().isEmpty()) {
+                        tea_qua = 0;
+                    } else {
+                        tea_qua = (int) Double.parseDouble(et_quantity_gt.getText().toString());
+                    }
+                    if (et_quantity_water.getText().toString().isEmpty()) {
+                        water_qua = 0;
+                    } else {
+                        water_qua = (int) Double.parseDouble(et_quantity_water.getText().toString());
+                    }
+                    int totalTea = tea_qua - water_qua;
+                    et_quantity_total_tea.setText(String.valueOf(totalTea));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // This method is called to notify you that somewhere within the `Editable`, new text has been inserted or removed.
+                int tea_qua;
+                int water_qua;
+                try {
+                    if (et_quantity_gt.getText().toString().isEmpty()) {
+                        tea_qua = 0;
+                    } else {
+                        tea_qua = (int) Double.parseDouble(et_quantity_gt.getText().toString());
+                    }
+                    if (et_quantity_water.getText().toString().isEmpty()) {
+                        water_qua = 0;
+                    } else {
+                        water_qua = (int) Double.parseDouble(et_quantity_water.getText().toString());
+                    }
+                    int totalTea = tea_qua - water_qua;
+                    et_quantity_total_tea.setText(String.valueOf(totalTea));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+
+
+
+        Date currentDate = new Date();
+
+        // Define a date format for year, month, and day
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        // Format the date and set it to the TextView
+        String formattedDate = dateFormat.format(currentDate);
+        TvDate.setText(formattedDate);
+
+        DatabaseHelperClass dbHelper = new DatabaseHelperClass(SupplierFormActivity.this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String tableNameToCheck = "SUPPLIER_NAMES";
+
+        boolean tableExists = isTableExists(db, tableNameToCheck);
+
+        if (tableExists) {
+            // The table exists
+            gettransactionNo();
+        } else {
+            // The table does not exist
+            incrementedCount = 1;
+        }
+
+
 
         // Retrieving the value using its keys the file name
 // must be same in both saving and retrieving the data
         @SuppressLint("WrongConstant") SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_APPEND);
-
-// The value will be default as empty string because for
-// the very first time when the app is opened, there is nothing to show
-        greenTeaPrice_pre = sh.getString("greetTea_pr_pre", "1");
-        transport_up_pre = sh.getString("transport_pr_pre", "1");
-
-        et_unitPrice_gt.setText(greenTeaPrice_pre);
-        et_unitPrice_tp_deduction.setText(transport_up_pre);
+//local storage deeptha
 
         String json = sh.getString("myModel", "");
 
         if (!json.isEmpty()) {
+
             spinner_supplier.setVisibility(View.GONE);
             TvSuppName.setVisibility(View.VISIBLE);
+            Btnadd.setVisibility(View.GONE);
+            button_update_data.setVisibility(View.VISIBLE);
+            showDatePickerButton.setVisibility(View.GONE);
             // Convert the JSON string back to a MyModel object
             Gson gson = new Gson();
             EmployeeModalClass myModel = gson.fromJson(json, EmployeeModalClass.class);
 
-            Toast.makeText(SupplierFormActivity.this, "S===================", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SupplierFormActivity.this, "", Toast.LENGTH_SHORT).show();
 
-            TvSuppName.setText(myModel.getSupplier_name()+" / "+myModel.getSupplier_id());
-            suppler_name = myModel.getSupplier_name()+" / "+myModel.getSupplier_id();
+            TvSuppName.setText(myModel.getSupplier_name() + " - " + myModel.getSupplier_id());
+            suppler_name = myModel.getSupplier_name() + " - " + myModel.getSupplier_id();
+            TvTrId.setText(myModel.getTrn_id());
 
             et_quantity_gt.setText(myModel.getGreentea_qua());
-            et_price_gt.setText(myModel.getGreentea_pr());
+            et_quantity_water.setText(myModel.getWater_qua());
+            et_quantity_total_tea.setText(myModel.getTotal_tea_qua());
             et_quantity_ae.setText(myModel.getAdditional_qua());
-            et_price_ae.setText(myModel.getAdditional_pr());
             et_quantity_ca_deduction.setText(myModel.getCash_qua());
-            et_price_ca_deduction.setText(myModel.getCash_pr());
             et_quantity_wf_deduction.setText(myModel.getWelfare_qua());
-            et_price_wf_deduction.setText(myModel.getWelfare_pr());
             et_quantity_mt_deduction.setText(myModel.getMt_qua());
-            et_price_mt_deduction.setText(myModel.getMt_pr());
             et_quantity_mr_deduction.setText(myModel.getManure_qua());
-            et_price_mr_deduction.setText(myModel.getManure_pr());
             et_quantity_tp_deduction.setText(myModel.getTransport_qua());
-            et_price_tp_deduction.setText(myModel.getTransport_pr());
             et_quantity_kok_deduction.setText(myModel.getKok_qua());
-            et_price_kok_deduction.setText(myModel.getKok_pr());
             et_quantity_ot_deduction.setText(myModel.getOther_qua());
-            et_price_ot_deduction.setText(myModel.getOther_pr());
 
-            et_unitPrice_gt.setText(greenTeaPrice_pre);
-            et_unitPrice_ae.setText(myModel.getAdditional_up());
-            et_unitPrice_ca_deduction.setText(myModel.getCash_up());
-            et_unitPrice_wf_deduction.setText(myModel.getWelfare_up());
-            et_unitPrice_tp_deduction.setText(transport_up_pre);
-            et_unitPrice_mr_deduction.setText(myModel.getManure_up());
-            et_unitPrice_mt_deduction.setText(myModel.getMt_up());
-            et_unitPrice_kok_deduction.setText(myModel.getKok_up());
-            et_unitPrice_ot_deduction.setText(myModel.getOther_up());
-            et_total_earnings.setText(myModel.getTotal_earning());
-            et_total_deduction.setText(myModel.getTotal_deduction());
-            et_total_sum.setText(myModel.getTotal_sum());
+            TvDate.setText(myModel.getSupp_date());
+
         } else {
+            TvTrId.setText(incrementedCount+"");
             spinner_supplier.setVisibility(View.VISIBLE);
             TvSuppName.setVisibility(View.GONE);
+            Btnadd.setVisibility(View.VISIBLE);
+            button_update_data.setVisibility(View.GONE);
             quantity_gt = "0";
-            price_gt = "0";
             quantity_ae = "0";
-            price_ae = "0";
             quantity_ca_deduction = "0";
             quantity_wf_deduction = "0";
             quantity_tp_deduction = "0";
@@ -250,72 +339,58 @@ public class SupplierFormActivity extends AppCompatActivity {
             quantity_kok_deduction = "0";
             quantity_ot_deduction = "0";
 
-            price_ca_deduction = "0";
-            price_wf_deduction = "0";
-            price_tp_deduction = "0";
-            price_mt_deduction = "0";
-            price_mr_deduction = "0";
-            price_kok_deduction = "0";
-            price_ot_deduction = "0";
-
-            up_gt = et_unitPrice_gt.getText().toString();
-            up_ae = "0";
-            up_ca = "0";
-            up_wf = "0";
-            up_tp = et_unitPrice_tp_deduction.getText().toString();
-            up_mt = "0";
-            up_mr = "0";
-            up_kok = "0";
-            up_ot = "0";
         }
-        supplier_names.add("D.M. Ubesena / 01");
-        supplier_names.add("D.M. Jayasena / 02");
-        supplier_names.add("D.M. Anulawathi / 03");
-        supplier_names.add("D.M. Jayasundara / 04");
-        supplier_names.add("D.M. Seelawathi / 05");
-        supplier_names.add("B.M.L. A. Kumara / 06");
-        supplier_names.add("B.M. Karunarathna / 07");
-        supplier_names.add("D.M. Pemawathi / 08");
-        supplier_names.add("D.M.A. Bandara / 09");
-        supplier_names.add("G.E.Dissanayaka / 10");
-        supplier_names.add("D.M. Rathnasiri / 11");
-        supplier_names.add("B.M.S. Ranjith / 12");
-        supplier_names.add("D.M.B. Kanchana / 13");
-        supplier_names.add("B.M. H. Bandara / 14");
-        supplier_names.add("A.J.M. Rajesinghe / 15");
-        supplier_names.add("D.M. Jayawardhana / 16");
-        supplier_names.add("B.M.S. Priyankara / 17");
-        supplier_names.add("E.W. Siripala / 18");
-        supplier_names.add("D.M. Rathnathilaka / 19");
-        supplier_names.add("D.M. Dhanasena / 20");
-        supplier_names.add("B.M. Gajanayaka / 21");
-        supplier_names.add("B.M. N. Jiyalath / 22");
-        supplier_names.add("R.M. Muthumenika / 23");
-        supplier_names.add("H.M. Ghanawathi / 24");
-        supplier_names.add("B.M. Swarnalatha / 25");
-        supplier_names.add("D.M.Dhanapala / 26");
-        supplier_names.add("D.M. Swarnalatha / 27");
-        supplier_names.add("D.M. Gunapala / 28");
-        supplier_names.add("D.M. Ghanasiri / 29");
-        supplier_names.add("D.M. Ghanawathi / 30");
-        supplier_names.add("B.R.N. Premathilaka / 31");
-        supplier_names.add("D.M. Aberathna / 32");
-        supplier_names.add("W.M. Wasana / 33");
-        supplier_names.add("D.M.Hindandara / 34");
-        supplier_names.add("B.R.Shanthi / 35");
-        supplier_names.add("D.M. Sumanawathi / 36");
-        supplier_names.add("R.M.Nimalawathi / 37");
-        supplier_names.add("V.M. Keerthilatha / 38");
-        supplier_names.add("D.M. Muthubandara / 39");
-        supplier_names.add("D.M. Kumaradasa / 40");
-        supplier_names.add("B.M. K. Kumara / 41");
-        supplier_names.add("A.M. Chandani / 42");
-        supplier_names.add("B.M. Premawansha / 51");
-        supplier_names.add("D.M.H. Kumari / 52");
-        supplier_names.add("Sunil / 53");
-        supplier_names.add("J.M.Indrani / 54");
-        supplier_names.add("Karunarathna / 55");
-        supplier_names.add("D.M. J.Podimenika / 56");
+
+        String[] lines = FileReader.readTextFile(this, R.raw.suppliers);
+
+        // Now 'lines' contains each line from the existing text file as a separate element
+        // You can use it as needed, for example, print it to the console
+        supplier_names.addAll(Arrays.asList(lines));
+
+        spinner_supplier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog = new Dialog(SupplierFormActivity.this);
+                dialog.setContentView(R.layout.dialog_searchable_spinner);
+                dialog.getWindow().setLayout(850, 1000);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+
+                EditText editText = dialog.findViewById(R.id.EtSearching);
+                ListView listView = dialog.findViewById(R.id.LvItems);
+
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(SupplierFormActivity.this, R.layout.support_simple_spinner_dropdown_item, supplier_names);
+                listView.setAdapter(arrayAdapter);
+
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        arrayAdapter.getFilter().filter(s);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Toast.makeText(SupplierFormActivity.this, "Position "+position, Toast.LENGTH_SHORT).show();
+                        spinner_supplier.setText(arrayAdapter.getItem(position));
+                        suppler_name = arrayAdapter.getItem(position);
+                        supplier_position = position;
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
 
         DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass(SupplierFormActivity.this);
         SupplierModalClass supplierModalClass = new SupplierModalClass();
@@ -340,7 +415,12 @@ public class SupplierFormActivity extends AppCompatActivity {
         }
         databaseHelperClass.addSuppliers(supplierModalClass);
 
-        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, supplier_names);
+//        ArrayAdapter<String> autoCompleteAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, supplier_names);
+//        autoCompleteTextView.setAdapter(autoCompleteAdapter);
+//
+//        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, supplier_names);
+//        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinner_supplier.setAdapter(spinnerAdapter);
 
 
         BtnBack.setOnClickListener(new View.OnClickListener() {
@@ -351,43 +431,126 @@ public class SupplierFormActivity extends AppCompatActivity {
             }
         });
 
+        button_update_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = SupplierFormActivity.this.getSharedPreferences("MySharedPref_update", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("updateClick", "1");
+                editor.apply();
+
+
+                loading.setVisibility(View.VISIBLE);
+                loading.playAnimation();
+                String trans_id = TvTrId.getText().toString();
+                quantity_gt = et_quantity_gt.getText().toString();
+                quantity_water = et_quantity_water.getText().toString();
+                quantity_total_tea = et_quantity_total_tea.getText().toString();
+                quantity_gt = et_quantity_gt.getText().toString();
+                quantity_ae = et_quantity_ae.getText().toString();
+                quantity_ca_deduction = et_quantity_ca_deduction.getText().toString();
+                quantity_wf_deduction = et_quantity_wf_deduction.getText().toString();
+                quantity_tp_deduction = et_quantity_tp_deduction.getText().toString();
+                quantity_mr_deduction = et_quantity_mr_deduction.getText().toString();
+                quantity_mt_deduction = et_quantity_mt_deduction.getText().toString();
+                quantity_kok_deduction = et_quantity_kok_deduction.getText().toString();
+                quantity_ot_deduction = et_quantity_ot_deduction.getText().toString();
+                supplyDate = TvDate.getText().toString();
+
+                final Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        final Handler handler2 = new Handler(Looper.getMainLooper());
+                        handler2.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Do something after 100ms
+                                DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass(SupplierFormActivity.this);
+                                databaseHelperClass.updateRecord("trn_id", trans_id, quantity_gt, quantity_water, quantity_total_tea,
+                                        quantity_ae,
+                                        quantity_ca_deduction,
+                                        quantity_wf_deduction,
+                                        quantity_tp_deduction,
+                                        quantity_mr_deduction,
+                                        quantity_mt_deduction,
+                                        quantity_kok_deduction,
+                                        quantity_ot_deduction);
+                                //databaseHelperClass.addEmployee(employeeModalClass);
+
+//                                    if (sameNameOrNot == true) {
+//                                        Intent mainActivityIntent = new Intent(SupplierFormActivity.this, MainActivity.class);
+//                                        startActivity(mainActivityIntent);
+//                                    }
+//                                    Intent mainActivityIntent = new Intent(SupplierFormActivity.this, MainActivity.class);
+//                                    startActivity(mainActivityIntent);
+                                celebrate.pauseAnimation();
+                                celebrate.setVisibility(View.GONE);
+
+                                Intent mainActivityIntent = new Intent(SupplierFormActivity.this, PrintBillActivity.class);
+                                startActivity(mainActivityIntent);
+                                Toast.makeText(SupplierFormActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
+                                nestedScrollView.setVisibility(View.VISIBLE);
+
+                                loading.setVisibility(View.GONE);
+                                loading.pauseAnimation();
+                                Btnadd.setVisibility(View.VISIBLE);
+
+                            }
+                        }, 2000);
+                    }
+
+                }, 2000);
+
+
+            }
+        });
+
 
         Btnadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String supplier_Name;
 
-                DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass(SupplierFormActivity.this);
-                List<EmployeeModalClass> employeeModalClassList = databaseHelperClass.getEmployeeList();
+                SharedPreferences preferences = getSharedPreferences("MySharedPref_update", Context.MODE_PRIVATE);
+                preferences.edit().clear().commit();
 
-                String nameId = suppler_name;
-                String[] separated = nameId.split("/");
-                String name = separated[0];
-                int statusDelete = 0;
+                Btnadd.setVisibility(View.INVISIBLE);
+                loading.setVisibility(View.VISIBLE);
+                loading.playAnimation();
+                if (supplier_position >= 0 || !TvSuppName.getText().toString().isEmpty()) {
+                    String supplier_Name;
+                    String nameId = suppler_name;
 
-                for (EmployeeModalClass employeeModalClass1: employeeModalClassList
-                ) {
-                    supplier_Name = employeeModalClass1.getSupplier_name();
-                    Log.d(TAG, "onClick: "+supplier_Name);
-                    Log.d(TAG, "onClick2: "+name);
+                    DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass(SupplierFormActivity.this);
+                    List<EmployeeModalClass> employeeModalClassList = databaseHelperClass.getEmployeeList();
 
-                    if ((name.contains(supplier_Name)) && statusDelete == 0) {
-                        sameNameOrNot = true;
-                        statusDelete = 1;
-                        databaseHelperClass.deleteSupplier(employeeModalClass1.getSupplier_name());
+//                    if (employeeModalClassList.size() >= 1) {
+//
+//                        String[] separated = nameId.split(" - ");
+//                        String name = separated[1];
+//                        int statusDelete = 0;
+//
+//                        for (EmployeeModalClass employeeModalClass1 : employeeModalClassList
+//                        ) {
+//                            supplier_Name = employeeModalClass1.getSupplier_name();
+//                            Log.d(TAG, "onClick: " + supplier_Name);
+//                            Log.d(TAG, "onClick2: " + name);
+//
+//                            if ((name.contains(supplier_Name)) && statusDelete == 0) {
+//                                sameNameOrNot = true;
+//                                statusDelete = 1;
+//                                databaseHelperClass.deleteSupplier(employeeModalClass1.getSupplier_name());
+//
+//                            } else {
+//                                sameNameOrNot = false;
+//                            }
+//                        }
+//                    } else {
+//                        sameNameOrNot = false;
+//                    }
 
-                    } else {
-                        sameNameOrNot = false;
-                    }
-                }
-
-                if (dataAdapter.isEmpty()) {
-                    Toast.makeText(SupplierFormActivity.this, "PLEASE ADD SUPPLIER FIRST", Toast.LENGTH_SHORT).show();
-
-                } else {
-                    loading.setVisibility(View.VISIBLE);
-                    loading.playAnimation();
-                    nestedScrollView.setVisibility(View.GONE);
+                    //nestedScrollView.setVisibility(View.GONE);
 
                     final Handler handler = new Handler(Looper.getMainLooper());
                     handler.postDelayed(new Runnable() {
@@ -395,11 +558,11 @@ public class SupplierFormActivity extends AppCompatActivity {
                         public void run() {
                             //Do something after 100ms
 
-
                             quantity_gt = et_quantity_gt.getText().toString();
-                            price_gt = et_price_gt.getText().toString();
+                            quantity_water = et_quantity_water.getText().toString();
+                            quantity_total_tea = et_quantity_total_tea.getText().toString();
+                            quantity_gt = et_quantity_gt.getText().toString();
                             quantity_ae = et_quantity_ae.getText().toString();
-                            price_ae = et_price_ae.getText().toString();
                             quantity_ca_deduction = et_quantity_ca_deduction.getText().toString();
                             quantity_wf_deduction = et_quantity_wf_deduction.getText().toString();
                             quantity_tp_deduction = et_quantity_tp_deduction.getText().toString();
@@ -407,33 +570,7 @@ public class SupplierFormActivity extends AppCompatActivity {
                             quantity_mt_deduction = et_quantity_mt_deduction.getText().toString();
                             quantity_kok_deduction = et_quantity_kok_deduction.getText().toString();
                             quantity_ot_deduction = et_quantity_ot_deduction.getText().toString();
-
-                            price_ca_deduction = et_price_ca_deduction.getText().toString();
-                            price_wf_deduction = et_price_wf_deduction.getText().toString();
-                            price_tp_deduction = et_price_tp_deduction.getText().toString();
-                            price_mt_deduction = et_price_mt_deduction.getText().toString();
-                            price_mr_deduction = et_price_mr_deduction.getText().toString();
-                            price_kok_deduction = et_price_kok_deduction.getText().toString();
-                            price_ot_deduction = et_price_ot_deduction.getText().toString();
-                            total_earnings = et_total_earnings.getText().toString();
-                            total_deduction = et_total_deduction.getText().toString();
-                            total_sum = et_total_sum.getText().toString();
-
-
-                            up_ae = et_unitPrice_ae.getText().toString();
-                            up_ca = et_unitPrice_ca_deduction.getText().toString();
-                            up_wf = et_unitPrice_wf_deduction.getText().toString();
-                            up_mt = et_unitPrice_mt_deduction.getText().toString();
-                            up_mr = et_price_mr_deduction.getText().toString();
-                            up_kok = et_unitPrice_kok_deduction.getText().toString();
-                            up_ot = et_unitPrice_ot_deduction.getText().toString();
-                            up_gt = et_unitPrice_gt.getText().toString();
-                            up_tp = et_unitPrice_tp_deduction.getText().toString();
-
-
-
-                            Toast.makeText(SupplierFormActivity.this, price_ot_deduction, Toast.LENGTH_SHORT).show();
-
+                            supplyDate = TvDate.getText().toString();
 
 //                            if (up_ot.length() <= 0 || up_tp.length() <= 0) {
 //                                Toast.makeText(SupplierFormActivity.this, "Green tea price or transport price empty", Toast.LENGTH_SHORT).show();
@@ -446,1141 +583,140 @@ public class SupplierFormActivity extends AppCompatActivity {
                                     DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass(SupplierFormActivity.this);
                                     EmployeeModalClass employeeModalClass = new EmployeeModalClass();
 
-                                    String[] separated = nameId.split("/");
-                                    String name = separated[0];
-                                    String id = separated[1];
+                                    String[] separated = nameId.split(" - ");
+                                    String name = separated[1];
+                                    String id = separated[0];
 
                                     employeeModalClass.setSupplier_name(name);
                                     employeeModalClass.setSupplier_id(id);
                                     employeeModalClass.setGreentea_qua(quantity_gt);
-                                    employeeModalClass.setGreentea_up(up_gt);
-                                    employeeModalClass.setGreentea_pr(price_gt);
+                                    employeeModalClass.setWater_qua(quantity_water);
+                                    employeeModalClass.setTotal_tea_qua(quantity_total_tea);
                                     employeeModalClass.setAdditional_qua(quantity_ae);
-                                    employeeModalClass.setAdditional_up(up_ae);
-                                    employeeModalClass.setAdditional_pr(price_ae);
                                     employeeModalClass.setCash_qua(quantity_ca_deduction);
-                                    employeeModalClass.setCash_up(up_ca);
-                                    employeeModalClass.setCash_pr(price_ca_deduction);
                                     employeeModalClass.setWelfare_qua(quantity_wf_deduction);
-                                    employeeModalClass.setWelfare_up(up_wf);
-                                    employeeModalClass.setWelfare_pr(price_wf_deduction);
                                     employeeModalClass.setTransport_qua(quantity_tp_deduction);
-                                    employeeModalClass.setTransport_up(up_tp);
-                                    employeeModalClass.setTransport_pr(price_tp_deduction);
                                     employeeModalClass.setManure_qua(quantity_mr_deduction);
-                                    employeeModalClass.setManure_up(up_mr);
-                                    employeeModalClass.setManure_pr(price_mr_deduction);
                                     employeeModalClass.setMt_qua(quantity_mt_deduction);
-                                    employeeModalClass.setMt_up(up_mt);
-                                    employeeModalClass.setMt_pr(price_mt_deduction);
                                     employeeModalClass.setKok_qua(quantity_kok_deduction);
-                                    employeeModalClass.setKok_up(up_kok);
-                                    employeeModalClass.setKok_pr(price_kok_deduction);
                                     employeeModalClass.setOther_qua(quantity_ot_deduction);
-                                    employeeModalClass.setOther_up(up_ot);
-                                    employeeModalClass.setOther_pr(price_ot_deduction);
-                                    employeeModalClass.setTotal_earning(total_earnings);
-                                    employeeModalClass.setTotal_deduction(total_deduction);
-                                    employeeModalClass.setTotal_sum(total_sum);
+                                    employeeModalClass.setSupp_date(supplyDate);
+                                    employeeModalClass.setTrn_id(String.valueOf("TRN"+incrementedCount));
 
                                     databaseHelperClass.addEmployee(employeeModalClass);
 
-                                    if (sameNameOrNot == true) {
-                                        Intent mainActivityIntent = new Intent(SupplierFormActivity.this, MainActivity.class);
-                                        startActivity(mainActivityIntent);
-                                    }
-
-                                    Toast.makeText(SupplierFormActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
-                                    nestedScrollView.setVisibility(View.VISIBLE);
+//                                    if (sameNameOrNot == true) {
+//                                        Intent mainActivityIntent = new Intent(SupplierFormActivity.this, MainActivity.class);
+//                                        startActivity(mainActivityIntent);
+//                                    }
+//                                    Intent mainActivityIntent = new Intent(SupplierFormActivity.this, MainActivity.class);
+//                                    startActivity(mainActivityIntent);
                                     celebrate.pauseAnimation();
                                     celebrate.setVisibility(View.GONE);
+
+                                    Intent mainActivityIntent = new Intent(SupplierFormActivity.this, PrintBillActivity.class);
+                                    startActivity(mainActivityIntent);
+                                    Toast.makeText(SupplierFormActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
+                                    nestedScrollView.setVisibility(View.VISIBLE);
+
+                                    et_quantity_gt.setText("");
+                                    et_quantity_ae.setText("");
+                                    et_quantity_ca_deduction.setText("");
+                                    et_quantity_wf_deduction.setText("");
+                                    et_quantity_mt_deduction.setText("");
+                                    et_quantity_mr_deduction.setText("");
+                                    et_quantity_tp_deduction.setText("");
+                                    et_quantity_kok_deduction.setText("");
+                                    et_quantity_ot_deduction.setText("");
+                                    loading.setVisibility(View.GONE);
+                                    loading.pauseAnimation();
+                                    Btnadd.setVisibility(View.VISIBLE);
+
                                 }
                             }, 2000);
-
-                            loading.setVisibility(View.GONE);
-                            loading.pauseAnimation();
-
-                            et_quantity_gt.setText("");
-                            et_price_gt.setText("");
-                            et_quantity_ae.setText("");
-                            et_price_ae.setText("");
-                            et_quantity_ca_deduction.setText("");
-                            et_price_ca_deduction.setText("");
-                            et_quantity_wf_deduction.setText("");
-                            et_price_wf_deduction.setText("");
-                            et_quantity_mt_deduction.setText("");
-                            et_price_mt_deduction.setText("");
-                            et_quantity_mr_deduction.setText("");
-                            et_price_mr_deduction.setText("");
-                            et_quantity_tp_deduction.setText("");
-                            et_price_tp_deduction.setText("");
-                            et_quantity_kok_deduction.setText("");
-                            et_price_kok_deduction.setText("");
-                            et_quantity_ot_deduction.setText("");
-                            et_price_ot_deduction.setText("");
-
-                            et_unitPrice_gt.setText(greenTeaPrice_pre);
-                            et_unitPrice_ae.setText("");
-                            et_unitPrice_ca_deduction.setText("");
-                            et_unitPrice_wf_deduction.setText("");
-                            et_unitPrice_tp_deduction.setText(transport_up_pre);
-                            et_unitPrice_mr_deduction.setText("");
-                            et_unitPrice_mt_deduction.setText("");
-                            et_unitPrice_kok_deduction.setText("");
-                            et_unitPrice_ot_deduction.setText("");
-                            et_total_earnings.setText("");
-                            et_total_deduction.setText("");
-//                    finish();
-//                    startActivity(getIntent());
-//                            }
-
                         }
+
                     }, 2000);
 
+
+                } else {
+                    loading.setVisibility(View.GONE);
+                    loading.pauseAnimation();
+                    Btnadd.setVisibility(View.VISIBLE);
+                    Toast.makeText(SupplierFormActivity.this,"Please select supplier first", Toast.LENGTH_SHORT).show();
                 }
-
-            }
-        });
-
-        et_quantity_gt.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_gt = et_quantity_gt.getText().toString();
-                String string_unitPrice_gt = et_unitPrice_gt.getText().toString();
-
-                if (string_quantity_gt.isEmpty()) {
-                    string_quantity_gt = "0";
-                }
-                if (string_unitPrice_gt.isEmpty()) {
-                    string_unitPrice_gt = "0";
-                }
-
-                double d_quantity_gt = Double.parseDouble(string_quantity_gt);
-                double d_unitPrice_gt = Double.parseDouble(string_unitPrice_gt);
-
-                String string_d_et_price_gt = Double.toString(d_quantity_gt * d_unitPrice_gt);
-
-                et_price_gt.setText(string_d_et_price_gt);
-                et_quantity_tp_deduction.setText(et_quantity_gt.getText().toString());
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_unitPrice_gt.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_gt = et_quantity_gt.getText().toString();
-                String string_unitPrice_gt = et_unitPrice_gt.getText().toString();
-
-                if (string_quantity_gt.isEmpty()) {
-                    string_quantity_gt = "0";
-                }
-                if (string_unitPrice_gt.isEmpty()) {
-                    string_unitPrice_gt = "0";
-                }
-                double d_quantity_gt = Double.parseDouble(string_quantity_gt);
-                double d_unitPrice_gt = Double.parseDouble(string_unitPrice_gt);
-
-                String string_d_et_price_gt = Double.toString(d_quantity_gt * d_unitPrice_gt);
-
-                et_price_gt.setText(string_d_et_price_gt);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_quantity_ae.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_ae = et_quantity_ae.getText().toString();
-                String string_unitPrice_ae = et_unitPrice_ae.getText().toString();
-
-                if (string_quantity_ae.isEmpty()) {
-                    string_quantity_ae = "0";
-                }
-                if (string_unitPrice_ae.isEmpty()) {
-                    string_unitPrice_ae = "0";
-                }
-                double d_quantity_ae = Double.parseDouble(string_quantity_ae);
-                double d_unitPrice_ae = Double.parseDouble(string_unitPrice_ae);
-
-                String string_d_et_price_ae = Double.toString(d_quantity_ae * d_unitPrice_ae);
-
-                et_price_ae.setText(string_d_et_price_ae);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_unitPrice_ae.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_ae = et_quantity_ae.getText().toString();
-                String string_unitPrice_ae = et_unitPrice_ae.getText().toString();
-
-                if (string_quantity_ae.isEmpty()) {
-                    string_quantity_ae = "0";
-                }
-                if (string_unitPrice_ae.isEmpty()) {
-                    string_unitPrice_ae = "0";
-                }
-                double d_quantity_ae = Double.parseDouble(string_quantity_ae);
-                double d_unitPrice_ae = Double.parseDouble(string_unitPrice_ae);
-
-                String string_d_et_price_ae = Double.toString(d_quantity_ae * d_unitPrice_ae);
-
-                et_price_ae.setText(string_d_et_price_ae);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_price_gt.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_price_gt = et_price_gt.getText().toString();
-                String string_price_ae = et_price_ae.getText().toString();
-
-                if (string_price_gt.isEmpty()) {
-                    string_price_gt = "0";
-                }
-                if (string_price_ae.isEmpty()) {
-                    string_price_ae = "0";
-                }
-                double d_price_gt = Double.parseDouble(string_price_gt);
-                double d_price_ae = Double.parseDouble(string_price_ae);
-
-                String string_d_et_final_price_gt = Double.toString(d_price_gt + d_price_ae);
-
-                et_total_earnings.setText(string_d_et_final_price_gt);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_price_ae.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_price_gt = et_price_gt.getText().toString();
-                String string_price_ae = et_price_ae.getText().toString();
-
-                if (string_price_gt.isEmpty()) {
-                    string_price_gt = "0";
-                }
-                if (string_price_ae.isEmpty()) {
-                    string_price_ae = "0";
-                }
-                double d_price_gt = Double.parseDouble(string_price_gt);
-                double d_price_ae = Double.parseDouble(string_price_ae);
-
-                String string_d_et_final_price_gt = Double.toString(d_price_gt + d_price_ae);
-
-                et_total_earnings.setText(string_d_et_final_price_gt);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
             }
         });
 
 
-        et_quantity_mr_deduction.addTextChangedListener(new TextWatcher() {
-
+        showDatePickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_mr_deduction = et_quantity_mr_deduction.getText().toString();
-                String string_unitPrice_mr_deduction = et_unitPrice_mr_deduction.getText().toString();
-
-                if (string_quantity_mr_deduction.isEmpty()) {
-                    string_quantity_mr_deduction = "0";
-                }
-                if (string_unitPrice_mr_deduction.isEmpty()) {
-                    string_unitPrice_mr_deduction = "0";
-                }
-                double d_quantity_mr_deduction = Double.parseDouble(string_quantity_mr_deduction);
-                double d_unitPrice_mr_deduction = Double.parseDouble(string_unitPrice_mr_deduction);
-
-                String string_d_et_price_mr_deduction = Double.toString(d_quantity_mr_deduction * d_unitPrice_mr_deduction);
-
-                et_price_mr_deduction.setText(string_d_et_price_mr_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+                showDatePicker();
             }
         });
-
-        et_unitPrice_mr_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_mr_deduction = et_quantity_mr_deduction.getText().toString();
-                String string_unitPrice_mr_deduction = et_unitPrice_mr_deduction.getText().toString();
-
-                if (string_quantity_mr_deduction.isEmpty()) {
-                    string_quantity_mr_deduction = "0";
-                }
-                if (string_unitPrice_mr_deduction.isEmpty()) {
-                    string_unitPrice_mr_deduction = "0";
-                }
-                double d_quantity_mr_deduction = Double.parseDouble(string_quantity_mr_deduction);
-                double d_unitPrice_mr_deduction = Double.parseDouble(string_unitPrice_mr_deduction);
-
-                String string_d_et_price_mr_deduction = Double.toString(d_quantity_mr_deduction * d_unitPrice_mr_deduction);
-
-                et_price_mr_deduction.setText(string_d_et_price_mr_deduction);
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_quantity_mt_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_mt_deduction = et_quantity_mt_deduction.getText().toString();
-                String string_unitPrice_mt_deduction = et_unitPrice_mt_deduction.getText().toString();
-
-                if (string_quantity_mt_deduction.isEmpty()) {
-                    string_quantity_mt_deduction = "0";
-                }
-                if (string_unitPrice_mt_deduction.isEmpty()) {
-                    string_unitPrice_mt_deduction = "0";
-                }
-                double d_quantity_mt_deduction = Double.parseDouble(string_quantity_mt_deduction);
-                double d_unitPrice_mt_deduction = Double.parseDouble(string_unitPrice_mt_deduction);
-
-                String string_d_et_mt_deduction = Double.toString(d_quantity_mt_deduction * d_unitPrice_mt_deduction);
-
-                et_price_mt_deduction.setText(string_d_et_mt_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_unitPrice_mt_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_mt_deduction = et_quantity_mt_deduction.getText().toString();
-                String string_unitPrice_mt_deduction = et_unitPrice_mt_deduction.getText().toString();
-
-                if (string_quantity_mt_deduction.isEmpty()) {
-                    string_quantity_mt_deduction = "0";
-                }
-                if (string_unitPrice_mt_deduction.isEmpty()) {
-                    string_unitPrice_mt_deduction = "0";
-                }
-                double d_quantity_mt_deduction = Double.parseDouble(string_quantity_mt_deduction);
-                double d_unitPrice_mt_deduction = Double.parseDouble(string_unitPrice_mt_deduction);
-
-                String string_d_et_mt_deduction = Double.toString(d_quantity_mt_deduction * d_unitPrice_mt_deduction);
-
-                et_price_mt_deduction.setText(string_d_et_mt_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_quantity_kok_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_kok_deduction = et_quantity_kok_deduction.getText().toString();
-                String string_unitPrice_kok_deduction = et_unitPrice_kok_deduction.getText().toString();
-
-                if (string_quantity_kok_deduction.isEmpty()) {
-                    string_quantity_kok_deduction = "0";
-                }
-                if (string_unitPrice_kok_deduction.isEmpty()) {
-                    string_unitPrice_kok_deduction = "0";
-                }
-                double d_quantity_kok_deduction = Double.parseDouble(string_quantity_kok_deduction);
-                double d_unitPrice_kok_deduction = Double.parseDouble(string_unitPrice_kok_deduction);
-
-                String string_d_et_price_kok_deduction = Double.toString(d_quantity_kok_deduction * d_unitPrice_kok_deduction);
-
-                et_price_kok_deduction.setText(string_d_et_price_kok_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_unitPrice_kok_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_kok_deduction = et_quantity_kok_deduction.getText().toString();
-                String string_unitPrice_kok_deduction = et_unitPrice_kok_deduction.getText().toString();
-
-                if (string_quantity_kok_deduction.isEmpty()) {
-                    string_quantity_kok_deduction = "0";
-                }
-                if (string_unitPrice_kok_deduction.isEmpty()) {
-                    string_unitPrice_kok_deduction = "0";
-                }
-                double d_quantity_kok_deduction = Double.parseDouble(string_quantity_kok_deduction);
-                double d_unitPrice_kok_deduction = Double.parseDouble(string_unitPrice_kok_deduction);
-
-                String string_d_et_price_kok_deduction = Double.toString(d_quantity_kok_deduction * d_unitPrice_kok_deduction);
-
-                et_price_kok_deduction.setText(string_d_et_price_kok_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_quantity_ot_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_ot_deduction = et_quantity_ot_deduction.getText().toString();
-                String string_unitPrice_ot_deduction = et_unitPrice_ot_deduction.getText().toString();
-
-                if (string_quantity_ot_deduction.isEmpty()) {
-                    string_quantity_ot_deduction = "0";
-                }
-                if (string_unitPrice_ot_deduction.isEmpty()) {
-                    string_unitPrice_ot_deduction = "0";
-                }
-                double d_quantity_ot_deduction = Double.parseDouble(string_quantity_ot_deduction);
-                double d_unitPrice_ot_deduction = Double.parseDouble(string_unitPrice_ot_deduction);
-
-                String string_d_et_price_ot_deduction = Double.toString(d_quantity_ot_deduction * d_unitPrice_ot_deduction);
-
-                et_price_ot_deduction.setText(string_d_et_price_ot_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_unitPrice_ot_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_ot_deduction = et_quantity_ot_deduction.getText().toString();
-                String string_unitPrice_ot_deduction = et_unitPrice_ot_deduction.getText().toString();
-
-                if (string_quantity_ot_deduction.isEmpty()) {
-                    string_quantity_ot_deduction = "0";
-                }
-                if (string_unitPrice_ot_deduction.isEmpty()) {
-                    string_unitPrice_ot_deduction = "0";
-                }
-                double d_quantity_ot_deduction = Double.parseDouble(string_quantity_ot_deduction);
-                double d_unitPrice_ot_deduction = Double.parseDouble(string_unitPrice_ot_deduction);
-
-                String string_d_et_price_ot_deduction = Double.toString(d_quantity_ot_deduction * d_unitPrice_ot_deduction);
-
-                et_price_ot_deduction.setText(string_d_et_price_ot_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_quantity_ca_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_ca_deduction = et_quantity_ca_deduction.getText().toString();
-                String string_unitPrice_ca_deduction = et_unitPrice_ca_deduction.getText().toString();
-
-                if (string_quantity_ca_deduction.isEmpty()) {
-                    string_quantity_ca_deduction = "0";
-                }
-                if (string_unitPrice_ca_deduction.isEmpty()) {
-                    string_unitPrice_ca_deduction = "0";
-                }
-                double d_quantity_ca_deduction = Double.parseDouble(string_quantity_ca_deduction);
-                double d_unitPrice_ca_deduction = Double.parseDouble(string_unitPrice_ca_deduction);
-
-                String string_d_et_price_ca_deduction = Double.toString(d_quantity_ca_deduction * d_unitPrice_ca_deduction);
-
-                et_price_ca_deduction.setText(string_d_et_price_ca_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_unitPrice_ca_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_ca_deduction = et_quantity_ca_deduction.getText().toString();
-                String string_unitPrice_ca_deduction = et_unitPrice_ca_deduction.getText().toString();
-
-                if (string_quantity_ca_deduction.isEmpty()) {
-                    string_quantity_ca_deduction = "1";
-                }
-                if (string_unitPrice_ca_deduction.isEmpty()) {
-                    string_unitPrice_ca_deduction = "0";
-                }
-                double d_quantity_ca_deduction = Double.parseDouble(string_quantity_ca_deduction);
-                double d_unitPrice_ca_deduction = Double.parseDouble(string_unitPrice_ca_deduction);
-
-                String string_d_et_price_ca_deduction = Double.toString(d_quantity_ca_deduction * d_unitPrice_ca_deduction);
-
-                et_price_ca_deduction.setText(string_d_et_price_ca_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_quantity_wf_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_wf_deduction = et_quantity_wf_deduction.getText().toString();
-                String string_unitPrice_wf_deduction = et_unitPrice_wf_deduction.getText().toString();
-
-                if (string_quantity_wf_deduction.isEmpty()) {
-                    string_quantity_wf_deduction = "1";
-                }
-                if (string_unitPrice_wf_deduction.isEmpty()) {
-                    string_unitPrice_wf_deduction = "0";
-                }
-                double d_quantity_wf_deduction = Double.parseDouble(string_quantity_wf_deduction);
-                double d_unitPrice_wf_deduction = Double.parseDouble(string_unitPrice_wf_deduction);
-
-                String string_d_et_price_wf_deduction = Double.toString(d_quantity_wf_deduction * d_unitPrice_wf_deduction);
-
-                et_price_wf_deduction.setText(string_d_et_price_wf_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_unitPrice_wf_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_wf_deduction = "1";
-                String string_unitPrice_wf_deduction = et_unitPrice_wf_deduction.getText().toString();
-
-                if (string_quantity_wf_deduction.isEmpty()) {
-                    string_quantity_wf_deduction = "0";
-                }
-                if (string_unitPrice_wf_deduction.isEmpty()) {
-                    string_unitPrice_wf_deduction = "0";
-                }
-                double d_quantity_wf_deduction = Double.parseDouble(string_quantity_wf_deduction);
-                double d_unitPrice_wf_deduction = Double.parseDouble(string_unitPrice_wf_deduction);
-
-                String string_d_et_price_wf_deduction = Double.toString(d_quantity_wf_deduction * d_unitPrice_wf_deduction);
-
-                et_price_wf_deduction.setText(string_d_et_price_wf_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_unitPrice_tp_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_tp_deduction = et_quantity_tp_deduction.getText().toString();
-                String string_unitPrice_tp_deduction = et_unitPrice_tp_deduction.getText().toString();
-
-                if (string_quantity_tp_deduction.isEmpty()) {
-                    string_quantity_tp_deduction = "0";
-                }
-                if (string_unitPrice_tp_deduction.isEmpty()) {
-                    string_unitPrice_tp_deduction = "0";
-                }
-                double d_quantity_tp_deduction = Double.parseDouble(string_quantity_tp_deduction);
-                double d_unitPrice_tp_deduction = Double.parseDouble(string_unitPrice_tp_deduction);
-
-                String string_d_et_price_tp_deduction = Double.toString(d_quantity_tp_deduction * d_unitPrice_tp_deduction);
-
-                et_price_tp_deduction.setText(string_d_et_price_tp_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_quantity_tp_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String string_quantity_tp_deduction = et_quantity_tp_deduction.getText().toString();
-                String string_unitPrice_tp_deduction = et_unitPrice_tp_deduction.getText().toString();
-
-                if (string_quantity_tp_deduction.isEmpty()) {
-                    string_quantity_tp_deduction = "0";
-                }
-                if (string_unitPrice_tp_deduction.isEmpty()) {
-                    string_unitPrice_tp_deduction = "0";
-                }
-                double d_quantity_tp_deduction = Double.parseDouble(string_quantity_tp_deduction);
-                double d_unitPrice_tp_deduction = Double.parseDouble(string_unitPrice_tp_deduction);
-
-                String string_d_et_price_tp_deduction = Double.toString(d_quantity_tp_deduction * d_unitPrice_tp_deduction);
-
-                et_price_tp_deduction.setText(string_d_et_price_tp_deduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_price_ca_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                CaTotalDeduction = 0.0;
-                String string_et_price_ca_deduction = et_price_ca_deduction.getText().toString();
-
-
-                if (string_et_price_ca_deduction.isEmpty()) {
-                    string_et_price_ca_deduction = "0";
-                }
-
-                double d_et_price_ca_deduction = Double.parseDouble(string_et_price_ca_deduction);
-
-
-                CaTotalDeduction += d_et_price_ca_deduction;
-                grandTotalDeduction = CaTotalDeduction + WfTotalDeduction + MtTotalDeduction +
-                        TpTotalDeduction + MrTotalDeduction + KokTotalDeduction + OtTotalDeduction;
-                String string_d_grandTotalDeduction = Double.toString(grandTotalDeduction);
-
-                et_total_deduction.setText(string_d_grandTotalDeduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_price_wf_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                WfTotalDeduction = 0.0;
-                String string_et_price_wf_deduction = et_price_wf_deduction.getText().toString();
-
-
-                if (string_et_price_wf_deduction.isEmpty()) {
-                    string_et_price_wf_deduction = "0";
-                }
-
-                double d_et_price_wf_deduction = Double.parseDouble(string_et_price_wf_deduction);
-
-
-                WfTotalDeduction += d_et_price_wf_deduction;
-                grandTotalDeduction = CaTotalDeduction + WfTotalDeduction + MtTotalDeduction +
-                        TpTotalDeduction + MrTotalDeduction + KokTotalDeduction + OtTotalDeduction;
-                String string_d_grandTotalDeduction = Double.toString(grandTotalDeduction);
-
-                et_total_deduction.setText(string_d_grandTotalDeduction);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_price_mt_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                MtTotalDeduction = 0.0;
-                String string_et_price_mt_deduction = et_price_mt_deduction.getText().toString();
-
-
-                if (string_et_price_mt_deduction.isEmpty()) {
-                    string_et_price_mt_deduction = "0";
-                }
-
-                double d_et_price_mt_deduction = Double.parseDouble(string_et_price_mt_deduction);
-
-
-                MtTotalDeduction += d_et_price_mt_deduction;
-                grandTotalDeduction = CaTotalDeduction + WfTotalDeduction + MtTotalDeduction +
-                        TpTotalDeduction + MrTotalDeduction + KokTotalDeduction + OtTotalDeduction;
-                String string_d_grandTotalDeduction = Double.toString(grandTotalDeduction);
-
-                et_total_deduction.setText(string_d_grandTotalDeduction);
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_price_mr_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                MrTotalDeduction = 0.0;
-                String string_et_price_mr_deduction = et_price_mr_deduction.getText().toString();
-
-
-                if (string_et_price_mr_deduction.isEmpty()) {
-                    string_et_price_mr_deduction = "0";
-                }
-
-                double d_et_price_mr_deduction = Double.parseDouble(string_et_price_mr_deduction);
-
-
-                MrTotalDeduction += d_et_price_mr_deduction;
-                grandTotalDeduction = CaTotalDeduction + WfTotalDeduction + MtTotalDeduction +
-                        TpTotalDeduction + MrTotalDeduction + KokTotalDeduction + OtTotalDeduction;
-                String string_d_grandTotalDeduction = Double.toString(grandTotalDeduction);
-
-                et_total_deduction.setText(string_d_grandTotalDeduction);
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_price_tp_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                TpTotalDeduction = 0.0;
-                String string_et_price_tp_deduction = et_price_tp_deduction.getText().toString();
-
-
-                if (string_et_price_tp_deduction.isEmpty()) {
-                    string_et_price_tp_deduction = "0";
-                }
-
-                double d_et_price_tp_deduction = Double.parseDouble(string_et_price_tp_deduction);
-
-
-                TpTotalDeduction += d_et_price_tp_deduction;
-                grandTotalDeduction = CaTotalDeduction + WfTotalDeduction + MtTotalDeduction +
-                        TpTotalDeduction + MrTotalDeduction + KokTotalDeduction + OtTotalDeduction;
-                String string_d_grandTotalDeduction = Double.toString(grandTotalDeduction);
-
-                et_total_deduction.setText(string_d_grandTotalDeduction);
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_price_kok_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                KokTotalDeduction = 0.0;
-                String string_et_price_kok_deduction = et_price_kok_deduction.getText().toString();
-
-
-                if (string_et_price_kok_deduction.isEmpty()) {
-                    string_et_price_kok_deduction = "0";
-                }
-
-                double d_et_price_kok_deduction = Double.parseDouble(string_et_price_kok_deduction);
-
-
-                KokTotalDeduction += d_et_price_kok_deduction;
-                grandTotalDeduction = CaTotalDeduction + WfTotalDeduction + MtTotalDeduction +
-                        TpTotalDeduction + MrTotalDeduction + KokTotalDeduction + OtTotalDeduction;
-                String string_d_grandTotalDeduction = Double.toString(grandTotalDeduction);
-
-                et_total_deduction.setText(string_d_grandTotalDeduction);
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_price_ot_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                OtTotalDeduction = 0.0;
-                String string_et_price_ot_deduction = et_price_ot_deduction.getText().toString();
-
-
-                if (string_et_price_ot_deduction.isEmpty()) {
-                    string_et_price_ot_deduction = "0";
-                }
-
-                double d_et_price_ot_deduction = Double.parseDouble(string_et_price_ot_deduction);
-
-
-                OtTotalDeduction += d_et_price_ot_deduction;
-                grandTotalDeduction = CaTotalDeduction + WfTotalDeduction + MtTotalDeduction +
-                        TpTotalDeduction + MrTotalDeduction + KokTotalDeduction + OtTotalDeduction;
-                String string_d_grandTotalDeduction = Double.toString(grandTotalDeduction);
-
-                et_total_deduction.setText(string_d_grandTotalDeduction);
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_total_earnings.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String totalEarning = et_total_earnings.getText().toString();
-                String totalDeduction = et_total_deduction.getText().toString();
-
-                if (totalEarning.isEmpty()) {
-                    totalEarning = "0";
-                }
-                if (totalDeduction.isEmpty()) {
-                    totalDeduction = "0";
-                }
-                double d_total_earning = Double.parseDouble(totalEarning);
-                double d_total_deduction = Double.parseDouble(totalDeduction);
-
-                String string_d_et_totalNet = Double.toString(d_total_earning - d_total_deduction);
-
-                et_total_sum.setText(string_d_et_totalNet);
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        et_total_deduction.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-                String totalEarning = et_total_earnings.getText().toString();
-                String totalDeduction = et_total_deduction.getText().toString();
-
-                if (totalEarning.isEmpty()) {
-                    totalEarning = "0";
-                }
-                if (totalDeduction.isEmpty()) {
-                    totalDeduction = "0";
-                }
-                double d_total_earning = Double.parseDouble(totalEarning);
-                double d_total_deduction = Double.parseDouble(totalDeduction);
-
-                String string_d_et_totalNet = Double.toString(d_total_earning - d_total_deduction);
-
-                et_total_sum.setText(string_d_et_totalNet);
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                Toast.makeText(getApplicationContext(), "before text change", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-//                Toast.makeText(getApplicationContext(), "after text change", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        try {
-            List<SupplierModalClass> supplierModalClassList = databaseHelperClass.getSupplierNames();
-
-            for (SupplierModalClass supplier_names_derails : supplierModalClassList
-            ) {
-                String names_derails = supplier_names_derails.getSupplier_name();
-                supplier_names.add(names_derails);
-            }
-            if (supplierModalClassList.size() > 0) {
-
-                // Drop down layout style - list view with radio button
-                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                // attaching data adapter to spinner
-                spinner_supplier.setAdapter(dataAdapter);
-
-
-            } else {
-                Toast.makeText(SupplierFormActivity.this, "No details to view", Toast.LENGTH_SHORT).show();
-
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        spinner_supplier.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                suppler_name = spinner_supplier.getSelectedItem().toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
-
-        });
-
 
     }
 
-    public void getPreData() {
-        Toast.makeText(SupplierFormActivity.this, "No ================", Toast.LENGTH_SHORT).show();
+    public boolean isTableExists(SQLiteDatabase db, String tableName) {
+        Cursor cursor = db.rawQuery(
+                "PRAGMA table_info(" + tableName + ")",
+                null
+        );
 
+        if (cursor != null) {
+            cursor.close();
+            return true; // Table exists
+        } else {
+            return false; // Table does not exist
+        }
+    }
+
+    private void gettransactionNo() {
+        SQLiteDatabase db = openOrCreateDatabase("Final_Tea", Context.MODE_PRIVATE, null);
+
+// SQL query to count the records in the table
+        //String countQuery = "SELECT COUNT(*) FROM SUPPLIER";
+        String countQuery = "SELECT id FROM SUPPLIER ORDER BY id DESC LIMIT 1";
+
+// Execute the query and get the result
+        Cursor cursor = db.rawQuery(countQuery, null);
+
+        int recordCount = 0;
+
+        if (cursor.moveToFirst()) {
+            recordCount = cursor.getInt(0);
+        }
+
+// Close the cursor and database
+        cursor.close();
+        db.close();
+
+// Increment the count by 1
+        incrementedCount = recordCount + 1;
+        Log.d(TAG, "gettransactionNo: "+incrementedCount);
+    }
+
+    private void showDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+                        // Handle the selected date here
+
+                        // For demonstration, we'll simply show the selected date in a toast message
+                        String selectedDate = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
+                        Toast.makeText(SupplierFormActivity.this, "Selected Date: " + selectedDate, Toast.LENGTH_SHORT).show();
+                        supplyDate = selectedDate;
+                        TvDate.setText(supplyDate);
+                    }
+                }, year, month, day);
+
+        datePickerDialog.show();
     }
 }

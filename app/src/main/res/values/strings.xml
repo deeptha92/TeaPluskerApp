@@ -1,14 +1,35 @@
 <resources>
     <string name="app_name">TeaPlucker</string>
 
-        <string name="register">REGISTER</string>
-        <string name="login_email_hint">Email</string>
-        <string name="login_password_hint">Password</string>
-        <string name="signup_login_hint">Already have an account? Sign In</string>
-        <string name="login_signup_hint">Don\'t have an account? Sign Up</string>
-        <string name="login_name_hint">Name</string>
-        <string name="login_mobile_number_hint">Mobile Number</string>
-        <string name="title">KOK</string>
-        <string name="invalid">Invalid Username or Password</string>
+    <string name="register">REGISTER</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="signup_login_hint">Already have an account? Sign In</string>
+    <string name="login_signup_hint">Don\'t have an account? Sign Up</string>
+    <string name="login_name_hint">Name</string>
+    <string name="login_mobile_number_hint">Mobile Number</string>
+    <string name="title">KOK</string>
+    <string name="invalid">Invalid Username or Password</string>
     <string name="delete_details">Delete Details</string>
+    <string name="select_supplier">Select Supplier</string>
+    <string name="searching">Search</string>
+    <string name="select_date">Select Date</string>
+    <string name="print">PRINT</string>
+    <string name="back">BACK</string>
+    <string name="print_bill">Print Bill</string>
+    <string name="transaction_id">Transaction Id</string>
+    <string name="supplier_name">SUPPLIER NAME</string>
+    <string name="date">Date</string>
+    <string name="green_tea">Green Tea</string>
+    <string name="view_edit">View/Edit</string>
+    <string name="name">Name</string>
+    <string name="trn_id">TrnId</string>
+    <string name="delete">DELETE</string>
+    <string name="view">VIEW</string>
+    <string name="total_tea">Total Tea</string>
+    <string name="water_deduction">Water Deduction</string>
+    <string name="deduction">Deduction</string>
+    <string name="view_b">view</string>
+    <string name="add">ADD</string>
+    <string name="update">UPDATE</string>
 </resources>

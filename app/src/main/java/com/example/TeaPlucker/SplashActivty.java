@@ -24,15 +24,17 @@ public class SplashActivty extends AppCompatActivity {
 
                 if (!loggedUserType.equals("empty") || !loggedUserName.equals("empty")) {
                     Intent intent = new Intent(SplashActivty.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                     finish();
                 } else {
                     Intent intent = new Intent(SplashActivty.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                     finish();
                 }
 
             }
-        }, 3000);
+        }, 1000);
     }
 }

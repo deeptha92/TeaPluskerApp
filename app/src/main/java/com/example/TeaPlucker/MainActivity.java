@@ -1,10 +1,5 @@
 package com.example.TeaPlucker;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -39,6 +34,11 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+
 public class MainActivity extends AppCompatActivity {
     private static final int STORAGE_EXTERNAL_STORAGE = 0;
     public static final String TAG = "MainActivity-->";
@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout LLFirst, LLSecond, LLThird, linearLayout, LLSecondLable, LLdetails, LLMessage;
     TextView tvMessage;
     private ImageView IvLogout;
-    private SQLiteDatabase sqLiteDatabase;
     String newDateStr;
 
     @Override
@@ -73,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
         tvMessage = findViewById(R.id.tvMessage);
         LLMessage = findViewById(R.id.LLMessage);
         IvLogout = findViewById(R.id.IvLogout);
+
+        lav_add_supplier.setEnabled(false);
+        //lav_sync.setEnabled(false);
+        lav_setPreData.setEnabled(false);
 
         Date c = Calendar.getInstance().getTime();
 
@@ -167,9 +170,7 @@ public class MainActivity extends AppCompatActivity {
         lav_sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 requestGrantPermission();
-
             }
         });
 
@@ -237,6 +238,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == STORAGE_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                exportDB2();
+            } else {
+                Toast.makeText(MainActivity.this, "granted failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     public void requestGrantPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             new AlertDialog.Builder(this)
@@ -260,20 +273,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == STORAGE_EXTERNAL_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                exportDB();
-            } else {
-                Toast.makeText(MainActivity.this, "granted failed", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    //
-    private void exportDB() {
+    private void exportDB2() {
         loading.setVisibility(View.INVISIBLE);
         LLFirst.setVisibility(View.INVISIBLE);
         linearLayout.setVisibility(View.GONE);
@@ -320,20 +320,6 @@ public class MainActivity extends AppCompatActivity {
                         curCSV.getString(13),
                         curCSV.getString(14),
                         curCSV.getString(15),
-                        curCSV.getString(16),
-                        curCSV.getString(17),
-                        curCSV.getString(18),
-                        curCSV.getString(19),
-                        curCSV.getString(20),
-                        curCSV.getString(21),
-                        curCSV.getString(22),
-                        curCSV.getString(23),
-                        curCSV.getString(24),
-                        curCSV.getString(25),
-                        curCSV.getString(26),
-                        curCSV.getString(27),
-                        curCSV.getString(28),
-                        curCSV.getString(29),
                 };
                 csvWrite.writeNext(arrStr);
                 Log.d(TAG, "exportDB: " + "OK");
@@ -389,6 +375,5 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
 }

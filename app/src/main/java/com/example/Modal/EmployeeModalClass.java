@@ -1,13 +1,14 @@
 package com.example.Modal;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 public class EmployeeModalClass {
     int id;
+
+    String trn_id;
     String supplier_name;
     String supplier_id;
     String greentea_qua;
+    String water_qua;
+    String total_tea_qua;
     String greentea_up;
     String greentea_pr;
     String additional_qua;
@@ -38,6 +39,7 @@ public class EmployeeModalClass {
     String total_earning;
     String total_deduction;
     String total_sum;
+    String supp_date;
 
 
 //    public EmployeeModalClass(String supplier_name, String greentea_qua, String greentea_up, String greentea_pr, String additional_qua, String additional_up, String additional_pr, String cash_qua, String cash_up, String cash_pr, String welfare_qua, String welfare_up, String welfare_pr, String mt_qua, String mt_up, String mt_pr, String manure_qua, String manure_up, String manure_pr, String transport_qua, String transport_up, String transport_pr, String kok_qua, String kok_up, String kok_pr, String other_qua, String other_up, String other_pr) {
@@ -334,5 +336,37 @@ public class EmployeeModalClass {
 
     public void setTotal_sum(String total_sum) {
         this.total_sum = total_sum;
+    }
+
+    public String getSupp_date() {
+        return supp_date;
+    }
+
+    public void setSupp_date(String supp_date) {
+        this.supp_date = supp_date;
+    }
+
+    public String getTrn_id() {
+        return trn_id;
+    }
+
+    public void setTrn_id(String trn_id) {
+        this.trn_id = trn_id;
+    }
+
+    public String getWater_qua() {
+        return water_qua;
+    }
+
+    public void setWater_qua(String water_qua) {
+        this.water_qua = water_qua;
+    }
+
+    public String getTotal_tea_qua() {
+        return total_tea_qua;
+    }
+
+    public void setTotal_tea_qua(String total_tea_qua) {
+        this.total_tea_qua = total_tea_qua;
     }
 }

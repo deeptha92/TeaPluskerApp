@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_tea_round"
         android:theme="@style/Theme.TeaPlucker">
         <activity
-            android:name=".LoginActivity"/>
+            android:name=".PrintBillActivity"
+            android:exported="false" />
+        <activity android:name=".LoginActivity" />
         <activity
             android:name=".SplashActivty"
             android:exported="true">
@@ -20,11 +22,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
-
         <activity android:name=".AddSuplierActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".ViewDetailsActivity" />
         <activity android:name=".EmployeeActivity" />
         <activity android:name=".PreDataSetActivity" />
@@ -32,11 +32,12 @@
             android:name=".SupplierFormActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".ViewEmployeeActivity" />
-        <activity android:name=".MainActivity"/>
-
     </application>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
 </manifest>

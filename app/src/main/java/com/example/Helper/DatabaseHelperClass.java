@@ -22,9 +22,13 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
     private static final String TABLE_NAME_SUPPLIER = "SUPPLIER_NAMES";
 
     public static final String ID = "id";
+    public static final String TRN_ID = "trn_id";
     public static final String NAME = "name";
+    public static final String DATE = "date";
     public static final String SUP_ID = "sup_id";
     public static final String GREENTEA_QUA = "greentea_qua";
+    public static final String WATER_QUA = "water_qua";
+    public static final String TOTAL_TEA_QUA = "total_tea_qua";
     public static final String ADDITIONAL_QUA = "additional_qua";
     public static final String CASH_QUA = "cash_qua";
     public static final String WELFARE_QUA = "welfare_qua";
@@ -34,47 +38,20 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
     public static final String KOK_QUA = "kok_qua";
     public static final String OTHER_QUA = "other_qua";
 
-    public static final String GREENTEA_PR = "greentea_pr";
-    public static final String ADDITIONAL_PR = "additional_pr";
-    public static final String CASH_PR = "cash_pr";
-    public static final String WELFARE_PR = "welfare_pr";
-    public static final String TRANSPORT_PR = "transport_pr";
-    public static final String MANURE_PR = "manure_pr";
-    public static final String MT_PR = "mt_pr";
-    public static final String KOK_PR = "kok_pr";
-    public static final String OTHER_PR = "other_pr";
-
-    public static final String GREENTEA_UP = "greentea_up";
-    public static final String ADDITIONAL_UP = "additional_up";
-    public static final String CASH_UP = "cash_up";
-    public static final String WELFARE_UP = "welfare_up";
-    public static final String TRANSPORT_UP = "transport_up";
-    public static final String MANURE_UP = "manure_up";
-    public static final String MT_UP = "mt_up";
-    public static final String KOK_UP = "kok_up";
-    public static final String OTHER_UP = "other_up";
-
-
     public static final String SUPPLIER_NAME = "supplier_name";
     public static final String SUPPLIER_ID = "supplier_id";
-    public static final String TOTAL_EARN = "total_earn";
-    public static final String TOTAL_DEDUCTION = "total_deduction";
-    public static final String TOTAL_SUM = "total_sum";
-
-    public static final String GREEN_TEA_UP_PRE = "green_up_pre";
-    public static final String TRANSPORT_UP_PRE = "tr_up_pre";
 
 
     private SQLiteDatabase sqLiteDatabase;
 
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + ID +
-            " INTEGER PRIMARY KEY AUTOINCREMENT," + NAME + " TEXT NOT NULL,"  + SUP_ID + " TEXT NOT NULL," + GREENTEA_QUA + " TEXT NOT NULL," +
-            GREENTEA_UP + " TEXT NOT NULL," + GREENTEA_PR + " TEXT NOT NULL, " + ADDITIONAL_QUA + " TEXT NOT NULL," +
-            ADDITIONAL_UP + " TEXT NOT NULL," + ADDITIONAL_PR + " TEXT NOT NULL, " + WELFARE_QUA + " TEXT NOT NULL, " + WELFARE_UP + " TEXT NOT NULL, " + WELFARE_PR + " TEXT NOT NULL, " +
-            CASH_UP + " TEXT NOT NULL," + CASH_QUA + " TEXT NOT NULL, " + CASH_PR + " TEXT NOT NULL, " +
-            TRANSPORT_QUA + " TEXT NOT NULL, " + TRANSPORT_UP + " TEXT NOT NULL, " + TRANSPORT_PR + " TEXT NOT NULL, " + MANURE_QUA + " TEXT NOT NULL, " +
-            MANURE_UP + " TEXT NOT NULL," + MANURE_PR + " TEXT NOT NULL, " + MT_QUA + " TEXT NOT NULL, " + MT_UP + " TEXT NOT NULL, " + MT_PR + " TEXT NOT NULL, " + KOK_QUA + " TEXT NOT NULL, " +
-            KOK_UP + " TEXT NOT NULL," + KOK_PR + " TEXT NOT NULL, " + OTHER_QUA + " TEXT NOT NULL, " + OTHER_UP + " TEXT NOT NULL, " + OTHER_PR + " TEXT NOT NULL, " + TOTAL_EARN + " TEXT NOT NULL, " + TOTAL_DEDUCTION + " TEXT NOT NULL, " + TOTAL_SUM + " TEXT NOT NULL);";
+            " INTEGER PRIMARY KEY AUTOINCREMENT," + DATE + " TEXT NOT NULL," + TRN_ID + " TEXT NOT NULL,"  + NAME + " TEXT NOT NULL,"  + SUP_ID + " TEXT NOT NULL," + GREENTEA_QUA + " TEXT NOT NULL," + WATER_QUA + " TEXT NOT NULL," + TOTAL_TEA_QUA + " TEXT NOT NULL," +
+            ADDITIONAL_QUA + " TEXT NOT NULL," +
+            WELFARE_QUA + " TEXT NOT NULL, " +
+            CASH_QUA + " TEXT NOT NULL, " +
+            TRANSPORT_QUA + " TEXT NOT NULL, " + MANURE_QUA + " TEXT NOT NULL, " +
+            MT_QUA + " TEXT NOT NULL, " + KOK_QUA + " TEXT NOT NULL, " +
+            OTHER_QUA + " TEXT NOT NULL);";
 
     private static final String CREATE_TABLE_SUPPLIER = "CREATE TABLE " + TABLE_NAME_SUPPLIER + "(" + ID +
             " INTEGER PRIMARY KEY AUTOINCREMENT," + SUPPLIER_ID + " TEXT NOT NULL," +
@@ -104,9 +81,13 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
     public void addEmployee(EmployeeModalClass employeeModalClass) {
 
         ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelperClass.DATE, employeeModalClass.getSupp_date());
+        contentValues.put(DatabaseHelperClass.TRN_ID, employeeModalClass.getTrn_id());
         contentValues.put(DatabaseHelperClass.NAME, employeeModalClass.getSupplier_name());
         contentValues.put(DatabaseHelperClass.SUP_ID, employeeModalClass.getSupplier_id());
         contentValues.put(DatabaseHelperClass.GREENTEA_QUA, employeeModalClass.getGreentea_qua());
+        contentValues.put(DatabaseHelperClass.WATER_QUA, employeeModalClass.getWater_qua());
+        contentValues.put(DatabaseHelperClass.TOTAL_TEA_QUA, employeeModalClass.getTotal_tea_qua());
         contentValues.put(DatabaseHelperClass.ADDITIONAL_QUA, employeeModalClass.getAdditional_qua());
         contentValues.put(DatabaseHelperClass.CASH_QUA, employeeModalClass.getCash_qua());
         contentValues.put(DatabaseHelperClass.WELFARE_QUA, employeeModalClass.getWelfare_qua());
@@ -116,28 +97,6 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
         contentValues.put(DatabaseHelperClass.KOK_QUA, employeeModalClass.getKok_qua());
         contentValues.put(DatabaseHelperClass.OTHER_QUA, employeeModalClass.getOther_qua());
 
-        contentValues.put(DatabaseHelperClass.GREENTEA_UP, employeeModalClass.getGreentea_up());
-        contentValues.put(DatabaseHelperClass.ADDITIONAL_UP, employeeModalClass.getAdditional_up());
-        contentValues.put(DatabaseHelperClass.CASH_UP, employeeModalClass.getCash_up());
-        contentValues.put(DatabaseHelperClass.WELFARE_UP, employeeModalClass.getWelfare_up());
-        contentValues.put(DatabaseHelperClass.TRANSPORT_UP, employeeModalClass.getTransport_up());
-        contentValues.put(DatabaseHelperClass.MT_UP, employeeModalClass.getMt_up());
-        contentValues.put(DatabaseHelperClass.MANURE_UP, employeeModalClass.getManure_up());
-        contentValues.put(DatabaseHelperClass.KOK_UP, employeeModalClass.getKok_up());
-        contentValues.put(DatabaseHelperClass.OTHER_UP, employeeModalClass.getOther_up());
-
-        contentValues.put(DatabaseHelperClass.GREENTEA_PR, employeeModalClass.getGreentea_pr());
-        contentValues.put(DatabaseHelperClass.ADDITIONAL_PR, employeeModalClass.getAdditional_pr());
-        contentValues.put(DatabaseHelperClass.CASH_PR, employeeModalClass.getCash_pr());
-        contentValues.put(DatabaseHelperClass.WELFARE_PR, employeeModalClass.getWelfare_pr());
-        contentValues.put(DatabaseHelperClass.TRANSPORT_PR, employeeModalClass.getTransport_pr());
-        contentValues.put(DatabaseHelperClass.MT_PR, employeeModalClass.getMt_pr());
-        contentValues.put(DatabaseHelperClass.MANURE_PR, employeeModalClass.getManure_pr());
-        contentValues.put(DatabaseHelperClass.KOK_PR, employeeModalClass.getKok_pr());
-        contentValues.put(DatabaseHelperClass.OTHER_PR, employeeModalClass.getOther_pr());
-        contentValues.put(DatabaseHelperClass.TOTAL_EARN, employeeModalClass.getTotal_earning());
-        contentValues.put(DatabaseHelperClass.TOTAL_DEDUCTION, employeeModalClass.getTotal_deduction());
-        contentValues.put(DatabaseHelperClass.TOTAL_SUM, employeeModalClass.getTotal_sum());
         sqLiteDatabase = getWritableDatabase();
         sqLiteDatabase.insert(DatabaseHelperClass.TABLE_NAME, null, contentValues);
 
@@ -177,7 +136,7 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
     }
 
     public List<EmployeeModalClass> getEmployeeList() {
-        String sql = "select * from " + TABLE_NAME;
+        String sql = "select * from " + TABLE_NAME +" order by TRN_ID desc";
         sqLiteDatabase = this.getReadableDatabase();
         List<EmployeeModalClass> storeEmployee = new ArrayList<>();
         Cursor cursor = sqLiteDatabase.rawQuery(sql, null);
@@ -185,72 +144,38 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
             do {
 
                 int id = Integer.parseInt(cursor.getString(0));
-                String NAME = cursor.getString(1);
-                String SUP_ID = cursor.getString(2);
-                String GREENTEA_QUA = cursor.getString(3);
-                String GREENTEA_UP = cursor.getString(4);
-                String GREENTEA_PR = cursor.getString(5);
-                String ADDITIONAL_QUA = cursor.getString(6);
-                String ADDITIONAL_UP = cursor.getString(7);
-                String ADDITIONAL_PR = cursor.getString(8);
-                String CASH_QUA = cursor.getString(9);
-                String CASH_UP = cursor.getString(10);
-                String CASH_PR = cursor.getString(11);
-                String WELFARE_QUA = cursor.getString(12);
-                String WELFARE_UP = cursor.getString(13);
-                String WELFARE_PR = cursor.getString(14);
-                String TRANSPORT_QUA = cursor.getString(15);
-                String TRANSPORT_UP = cursor.getString(16);
-                String TRANSPORT_PR = cursor.getString(17);
-                String MT_QUA = cursor.getString(18);
-                String MT_UP = cursor.getString(19);
-                String MT_PR = cursor.getString(20);
-                String MANURE_QUA = cursor.getString(21);
-                String MANURE_UP = cursor.getString(22);
-                String MANURE_PR = cursor.getString(23);
-                String KOK_QUA = cursor.getString(24);
-                String KOK_UP = cursor.getString(25);
-                String KOK_PR = cursor.getString(26);
-                String OTHER_QUA = cursor.getString(27);
-                String OTHER_UP = cursor.getString(28);
-                String OTHER_PR = cursor.getString(29);
-                String TOTAL_EARN = cursor.getString(30);
-                String TOTAL_DEDUCTION = cursor.getString(31);
-                String TOTAL_SUM = cursor.getString(32);
+                String DATE = cursor.getString(1);
+                String TRN_ID = cursor.getString(2);
+                String NAME = cursor.getString(3);
+                String SUP_ID = cursor.getString(4);
+                String GREENTEA_QUA = cursor.getString(5);
+                String WATER_QUA = cursor.getString(6);
+                String TOTAL_TEA_QUA = cursor.getString(7);
+                String ADDITIONAL_QUA = cursor.getString(8);
+                String CASH_QUA = cursor.getString(10);
+                String WELFARE_QUA = cursor.getString(9);
+                String TRANSPORT_QUA = cursor.getString(11);
+                String MT_QUA = cursor.getString(13);
+                String MANURE_QUA = cursor.getString(12);
+                String KOK_QUA = cursor.getString(14);
+                String OTHER_QUA = cursor.getString(15);
 
                 EmployeeModalClass employeeModalClass = new EmployeeModalClass();
+                employeeModalClass.setSupp_date(DATE);
+                employeeModalClass.setTrn_id(TRN_ID);
                 employeeModalClass.setSupplier_name(NAME);
                 employeeModalClass.setSupplier_id(SUP_ID);
                 employeeModalClass.setGreentea_qua(GREENTEA_QUA);
-                employeeModalClass.setGreentea_up(GREENTEA_UP);
-                employeeModalClass.setGreentea_pr(GREENTEA_PR);
+                employeeModalClass.setWater_qua(WATER_QUA);
+                employeeModalClass.setTotal_tea_qua(TOTAL_TEA_QUA);
                 employeeModalClass.setAdditional_qua(ADDITIONAL_QUA);
-                employeeModalClass.setAdditional_up(ADDITIONAL_UP);
-                employeeModalClass.setAdditional_pr(ADDITIONAL_PR);
-                employeeModalClass.setCash_up(CASH_UP);
-                employeeModalClass.setCash_pr(CASH_PR);
                 employeeModalClass.setCash_qua(CASH_QUA);
-                employeeModalClass.setWelfare_up(WELFARE_UP);
-                employeeModalClass.setWelfare_pr(WELFARE_PR);
                 employeeModalClass.setWelfare_qua(WELFARE_QUA);
                 employeeModalClass.setTransport_qua(TRANSPORT_QUA);
-                employeeModalClass.setTransport_up(TRANSPORT_UP);
-                employeeModalClass.setTransport_pr(TRANSPORT_PR);
                 employeeModalClass.setManure_qua(MANURE_QUA);
-                employeeModalClass.setManure_up(MANURE_UP);
-                employeeModalClass.setManure_pr(MANURE_PR);
                 employeeModalClass.setMt_qua(MT_QUA);
-                employeeModalClass.setMt_up(MT_UP);
-                employeeModalClass.setMt_pr(MT_PR);
                 employeeModalClass.setKok_qua(KOK_QUA);
-                employeeModalClass.setKok_up(KOK_UP);
-                employeeModalClass.setKok_pr(KOK_PR);
                 employeeModalClass.setOther_qua(OTHER_QUA);
-                employeeModalClass.setOther_up(OTHER_UP);
-                employeeModalClass.setOther_pr(OTHER_PR);
-                employeeModalClass.setTotal_earning(TOTAL_EARN);
-                employeeModalClass.setTotal_deduction(TOTAL_DEDUCTION);
-                employeeModalClass.setTotal_sum(TOTAL_SUM);
 
                 storeEmployee.add(employeeModalClass);
 
@@ -318,8 +243,37 @@ public class DatabaseHelperClass extends SQLiteOpenHelper {
 //        }
 //    }
 
+    public void updateRecord(String fieldName, String fieldValue, String quantity_gt, String quantity_water, String quantity_total_tea,
+                             String quantity_ae,
+                             String quantity_ca_deduction,
+                             String quantity_wf_deduction,
+                             String quantity_tp_deduction,
+                             String quantity_mr_deduction,
+                             String quantity_mt_deduction,
+                             String quantity_kok_deduction,
+                             String quantity_ot_deduction) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+        sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(GREENTEA_QUA, quantity_gt);
+        contentValues.put(WATER_QUA, quantity_water);
+        contentValues.put(TOTAL_TEA_QUA, quantity_total_tea);
+        contentValues.put(ADDITIONAL_QUA, quantity_ae);
+        contentValues.put(CASH_QUA, quantity_ca_deduction);
+        contentValues.put(WELFARE_QUA, quantity_wf_deduction);
+        contentValues.put(TRANSPORT_QUA, quantity_tp_deduction);
+        contentValues.put(MANURE_QUA, quantity_mr_deduction);
+        contentValues.put(MT_QUA, quantity_mt_deduction);
+        contentValues.put(KOK_QUA, quantity_kok_deduction);
+        contentValues.put(OTHER_QUA, quantity_ot_deduction);
+
+        sqLiteDatabase.update(TABLE_NAME, contentValues, TRN_ID + " = ?", new String[]{fieldValue});
+        sqLiteDatabase.close();
+    }
+
     public void deleteSupplier(String name) {
         sqLiteDatabase = this.getWritableDatabase();
-        sqLiteDatabase.delete(TABLE_NAME, NAME + " = ? ", new String[]{String.valueOf(name)});
+        sqLiteDatabase.delete(TABLE_NAME, TRN_ID + " = ? ", new String[]{String.valueOf(name)});
     }
 }

@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.Helper.DatabaseHelperClass;
@@ -66,6 +65,7 @@ public class EmployeeAdapterClass extends RecyclerView.Adapter<EmployeeAdapterCl
 
     String supplier_name;
     String supplier_id;
+    String trn_id;
 
 
     public EmployeeAdapterClass(List<EmployeeModalClass> employee, Context context) {
@@ -90,13 +90,15 @@ public class EmployeeAdapterClass extends RecyclerView.Adapter<EmployeeAdapterCl
         final EmployeeModalClass employeeModalClass = employee.get(position);
 //        holder.textViewId.setText(Integer.toString(employeeModalClass.getId()));
 //        holder.editTextName.setText(employeeModalClass.getName());
-        holder.editTextName.setText(employeeModalClass.getSupplier_name());
+        holder.editTextName.setText(employeeModalClass.getSupplier_name() +" - " + employeeModalClass.getSupplier_id());
+        holder.trnId.setText(employeeModalClass.getTrn_id());
+        holder.trnDate.setText(employeeModalClass.getSupp_date());
 
 
         holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseHelperClass.deleteSupplier(employeeModalClass.getSupplier_name());
+                databaseHelperClass.deleteSupplier(employeeModalClass.getTrn_id());
                 employee.remove(position);
                 notifyDataSetChanged();
                 Intent myIntent = new Intent(context, MainActivity.class);
@@ -109,37 +111,17 @@ public class EmployeeAdapterClass extends RecyclerView.Adapter<EmployeeAdapterCl
             @Override
             public void onClick(View v) {
                 greentea_qua = employeeModalClass.getGreentea_qua();
-                greentea_up = employeeModalClass.getGreentea_up();
-                greentea_pr = employeeModalClass.getGreentea_pr();
                 additional_qua = employeeModalClass.getAdditional_qua();
-                additional_up = employeeModalClass.getAdditional_up();
-                additional_pr = employeeModalClass.getAdditional_pr();
                 cash_qua = employeeModalClass.getCash_qua();
-                cash_up = employeeModalClass.getCash_up();
-                cash_pr = employeeModalClass.getCash_pr();
                 welfare_qua = employeeModalClass.getWelfare_qua();
-                welfare_up = employeeModalClass.getWelfare_up();
-                welfare_pr = employeeModalClass.getWelfare_pr();
                 mt_qua = employeeModalClass.getMt_qua();
-                mt_up = employeeModalClass.getMt_up();
-                mt_pr = employeeModalClass.getMt_pr();
                 manure_qua = employeeModalClass.getManure_qua();
-                manure_up = employeeModalClass.getManure_up();
-                manure_pr = employeeModalClass.getManure_pr();
                 transport_qua = employeeModalClass.getTransport_qua();
-                transport_up = employeeModalClass.getTransport_up();
-                transport_pr = employeeModalClass.getTransport_pr();
                 kok_qua = employeeModalClass.getKok_qua();
-                kok_up = employeeModalClass.getKok_up();
-                kok_pr = employeeModalClass.getKok_pr();
                 other_qua = employeeModalClass.getOther_qua();
-                other_up = employeeModalClass.getOther_up();
-                other_pr = employeeModalClass.getOther_pr();
-                total_earning = employeeModalClass.getTotal_earning();
-                total_deduction = employeeModalClass.getTotal_deduction();
-                total_sum = employeeModalClass.getTotal_sum();
                 supplier_name = employeeModalClass.getSupplier_name();
                 supplier_id = employeeModalClass.getSupplier_id();
+                trn_id = employeeModalClass.getTrn_id();
 
 //                PopUpClass popUpClass = new PopUpClass();
 //                popUpClass.showPopupWindow(v);
@@ -196,7 +178,9 @@ public class EmployeeAdapterClass extends RecyclerView.Adapter<EmployeeAdapterCl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewId;
-        EditText editTextName;
+        TextView editTextName;
+        TextView trnId;
+        TextView trnDate;
         TextView editTextData;
         Button buttonEdit;
         Button buttonDelete;
@@ -206,6 +190,8 @@ public class EmployeeAdapterClass extends RecyclerView.Adapter<EmployeeAdapterCl
         public ViewHolder(@NonNull @org.jetbrains.annotations.NotNull View itemView) {
             super(itemView);
             editTextName = itemView.findViewById(R.id.name);
+            trnId = itemView.findViewById(R.id.trnId);
+            trnDate = itemView.findViewById(R.id.trnDate);
             buttonDelete = itemView.findViewById(R.id.button_delete);
             buttonView = itemView.findViewById(R.id.button_view);
         }
